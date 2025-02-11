@@ -1,0 +1,40 @@
+﻿@{
+    ViewData["Title"] = "Editar Cargo";
+}
+@model InovaAcceso.Models.Cargo;
+<div class="container-fluid px-4 mt-4">
+    
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+        <li class="breadcrumb-item active">Editar Cargo</li>
+    </ol>
+    <div class="row">
+        <div class="col-sm-8 offset-sm-2">
+            <form asp-controller="Cargo" asp-action="EditarCargo" method="post">
+                <div class="mb-3">
+                    <input class="form-control" asp-for="IdCargo" hidden />
+                </div>
+                <div class="mb-3">
+                    <label>Nombre Cargo</label>
+                    <input class="form-control" asp-for="NombreCargo" type="text" />
+                </div>
+                <div class="mb-3">
+                    <label>Fecha Creacion</label>
+                    <input class="form-control" asp-for="FechaCreacion" type="datetime" readonly />
+                </div>
+                <div class="mb-3">
+                    <label>Fecha Modificacion</label>
+                    <input class="form-control" asp-for="FechaModificacion" type="datetime" readonly value="@DateTime.Now" />
+                </div>
+                <div class="mb-3">
+                    <label>Responsable Modificacion</label>
+                    <input class="form-control" asp-for="ResponsableModificacion" type="datetime" readonly value="Admin" />
+                </div>
+                <div class="mb-3">
+                    <button class="btn btn-primary" type="submit">Guardar</button>
+                    <a asp-controller="Cargo" asp-action="ListaCargo" class="btn btn-warning">Volver</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

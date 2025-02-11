@@ -1,0 +1,137 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+    // Obtener los datos pasados desde el controlador
+    var empleadosEnTurno = ViewData["EmpleadosEnTurno"] as IEnumerable<dynamic>;
+    var empleadosSinAsistencia = ViewData["EmpleadosSinAsistencia"] as IEnumerable<dynamic>;
+    var novedades = ViewData["Novedades"] as IEnumerable<dynamic>;
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        .card {
+            min-height: 100%; /* Asegura que las tarjetas ocupen todo el espacio vertical disponible */
+        }
+
+        .card-body {
+            display: flex;
+            flex-direction: column; /* Organiza el contenido en columna */
+            justify-content: space-between; /* Espacio entre los elementos */
+        }
+
+        .scrollable-list {
+            flex-grow: 1; /* Permite que la lista crezca y ocupe el espacio disponible */
+            overflow-y: auto; /* Habilita desplazamiento vertical */
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row">
+            <!-- Card 1: Empleados en Turno -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header bg-primary text-white d-flex align-items-center">
+                        <i class="bi bi-people-fill me-2"></i> <!-- Ícono -->
+                        Empleados en Turno
+                    </div>
+                    <div class="card-body">
+                        <div class="text-center mb-3">
+                            <img src="/img/empleados-en-turno.png" alt="Empleados en Turno" class="img-fluid" style="max-width: 100px;">
+                            <p>Total de empleados: <strong>@empleadosEnTurno?.Count()</strong></p>
+                        </div>
+                        <!-- Lista desplazable -->
+                        <div class="scrollable-list">
+                            <ul class="list-group">
+                                @if (empleadosEnTurno != null && empleadosEnTurno.Any())
+                                {
+                                    foreach (var empleado in empleadosEnTurno)
+                                    {
+                                        <li class="list-group-item">@empleado.NombreCompleto (@empleado.Turno)</li>
+                                    }
+                                }
+                                else
+                                {
+                                    <li class="list-group-item text-muted">No hay empleados en turno</li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2: Asistencia -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header bg-success text-white d-flex align-items-center">
+                        <i class="bi bi-check-circle-fill me-2"></i> <!-- Ícono -->
+                        Asistencia
+                    </div>
+                    <div class="card-body">
+                        <div class="text-center mb-3">
+                            <img src="/img/asistencia.png" alt="Asistencia" class="img-fluid" style="max-width: 100px;">
+                            <p>Empleados que no asistieron:</p>
+                        </div>
+                        <!-- Lista desplazable -->
+                        <div class="scrollable-list">
+                            <ul class="list-group">
+                                @if (empleadosSinAsistencia != null && empleadosSinAsistencia.Any())
+                                {
+                                    foreach (var empleado in empleadosSinAsistencia)
+                                    {
+                                        <li class="list-group-item">@empleado.NombreCompleto</li>
+                                    }
+                                }
+                                else
+                                {
+                                    <li class="list-group-item text-muted">No hay empleados sin asistencia</li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3: Novedades -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header bg-secondary text-white d-flex align-items-center">
+                        <i class="bi bi-info-circle-fill me-2"></i> <!-- Ícono -->
+                        Novedades
+                    </div>
+                    <div class="card-body">
+                        <div class="text-center mb-3">
+                            <img src="/img/novedades.jpg" alt="Novedades" class="img-fluid" style="max-width: 100px;">
+                            <p>:</p>
+                        </div>
+                        <!-- Lista desplazable -->
+                        <div class="scrollable-list">
+                            <ul class="list-group">
+                                @if (novedades != null && novedades.Any())
+                                {
+                                    foreach (var novedad in novedades)
+                                    {
+                                        <li class="list-group-item">
+                                            <strong>@novedad.NombreCompleto:</strong> @novedad.Detalle
+                                        </li>
+                                    }
+                                }
+                                else
+                                {
+                                    <li class="list-group-item text-muted">No hay novedades</li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

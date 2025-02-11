@@ -1,0 +1,176 @@
+﻿@model InovaAcceso.Models.Persona
+@using System.Security.Claims;
+<div class="container-fluid px-4 mt-4">
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+        <li class="breadcrumb-item active">Agregar</li>
+    </ol>
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (TempData["MessageError"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    <form asp-controller="Persona" asp-action="AgregarPersona" method="post">
+        <!-- Datos Personales -->
+        <fieldset class="border p-2 mb-2">
+            <h4 class="w-auto px-2">Datos Personales</h4>
+            <div class="row">
+                <!-- Primera columna -->
+                <div class="col-md-4">
+                    <div class="mb-2">
+                        <label class="px-2" for="idTipoDoc">Tipo de Documento</label>
+                        <select asp-for="IdTipoDoc" asp-items="ViewBag.TipoDocs" class="form-select"></select>
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="px-2" for="primerNombre">Primer Nombre</label>
+                        <input asp-for="PrimerNombre" class="form-control" type="text" />
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="px-2" for="primerApellido">Primer Apellido</label>
+                        <input asp-for="PrimerApellido" class="form-control" type="text" />
+                    </div>
+
+                </div>
+                <!-- Segunda columna -->
+                <div class="col-md-4">
+
+                    <div class="mb-2">
+                        <label class="px-2" for="numeroDocumento">Número de Documento</label>
+                        <input asp-for="NumeroDocumento" class="form-control" type="number" />
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="px-2" for="segundoNombre">Segundo Nombre</label>
+                        <input asp-for="SegundoNombre" class="form-control" type="text" />
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="px-2" for="segundoApellido">Segundo Apellido</label>
+                        <input asp-for="SegundoApellido" class="form-control" type="text" />
+                    </div>
+                </div>
+                <!-- Tercera columna -->
+                <div class="col-md-4">
+                    <div class="mb-2">
+                        <label class="px-2" for="edad">Edad</label>
+                        <input asp-for="Edad" class="form-control" type="number" />
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="px-2" for="sexo">Sexo</label>
+                        <select asp-for="Sexo" class="form-select">
+                            <option value="">Seleccione una opción</option>
+                            <option value="Masculino">Masculino</option>
+                            <option value="Femenino">Femenino</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="px-2" for="fechaNacimiento">Fecha de Nacimiento</label>
+                        <input asp-for="FechaNacimiento" class="form-control" type="date" />
+                    </div>
+
+                </div>
+
+            </div>
+        </fieldset>
+        <!-- Datos de Contacto -->
+        <fieldset class="border p-2 mb-2">
+            <H4 class="w-auto px-2">Datos de Contacto</H4>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="mb-2">
+                        <label class="px-2" for="email">Correo</label>
+                        <input asp-for="Email" class="form-control" type="email" />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="mb-2">
+                        <label class="px-2" for="telefono">Teléfono</label>
+                        <input asp-for="Telefono" class="form-control" type="number" />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="mb-2">
+                        <label class="px-2" for="direccion">Dirección</label>
+                        <input asp-for="Direccion" class="form-control" type="text" />
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+
+        <!-- Datos Laborales -->
+        <fieldset class="border p-2 mb-2">
+            <H4 class="w-auto px-2">Datos Laborales</H4>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="mb-2">
+                        <label class="px-2" for="idCargo">Cargo</label>
+                        <select asp-for="IdCargo" asp-items="ViewBag.Cargos" class="form-select"></select>
+                    </div>
+                    <div class="mb-2">
+                        <label class="px-2" for="fechaIngreso">Fecha de Ingreso</label>
+                        <input asp-for="FechaIngreso" class="form-control" type="date" />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="mb-2">
+                        <label class="px-2" for="idRol">Rol</label>
+                        <select asp-for="IdRol" asp-items="ViewBag.Roles" class="form-select"></select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="mb-2">
+                        <label class="px-2" for="idEstado">Estado</label>
+                        <select asp-for="IdEstado" asp-items="ViewBag.Estados" class="form-select"></select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <input asp-for="FechaCreacion" class="form-control" type="datetime-local" hidden value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" />
+                    <input asp-for="FechaModificacion" class="form-control" type="datetime-local" hidden value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" />
+                    <input asp-for="ResponsableModificacion" class="form-control" type="text" hidden value="@User.Claims.Where(c => c.Type == ClaimTypes.Name).Select(c => c.Value).SingleOrDefault()" />
+                </div>
+            </div>
+        </fieldset>
+        <!-- Botones de Acción -->
+        <div class="d-flex justify-content-center mb-2">
+            <button type="submit" class="btn btn-primary me-2">Guardar</button>
+            <a asp-controller="Persona" asp-action="ListaPersonas" class="btn btn-secondary">Cancelar</a>
+        </div>
+
+
+    </form>
+</div>
+
+
+<script>
+    // Espera 5 segundos (5000 ms) y luego oculta la alerta
+    setTimeout(function () {
+        let alertElement = document.querySelector('.alert-dismissible');
+        if (alertElement) {
+            let alert = new bootstrap.Alert(alertElement);
+            alert.close();
+        }
+    }, 9000);
+</script>

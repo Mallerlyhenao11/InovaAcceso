@@ -1,0 +1,70 @@
+﻿@model InovaAcceso.Models.RegistroAsistencia
+
+@{
+    ViewData["Title"] = "Editar Asistencia";
+}
+
+<div class="container-fluid px-4 mt-4">
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+        </li>
+        <li class="breadcrumb-item active">Editar Asistencia</li>
+    </ol>
+    <div class="row">
+        <div class="col-sm-8 offset-sm-2">
+            <form asp-controller="RegistroAsistencia" asp-action="EditarAsistencia" method="post">
+                <!-- Campos ocultos -->
+                <input type="hidden" asp-for="IdRegistro" />
+                <input type="hidden" asp-for="FechaCreacion" />
+                <input type="hidden" asp-for="FechaModificacion" value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" />
+                <input type="hidden" asp-for="ResponsableModificacion" value="@User.Claims.Where(c => c.Type == System.Security.Claims.ClaimTypes.Name).Select(c => c.Value).FirstOrDefault()" />
+
+                <!-- Persona -->
+                <div class="mb-3">
+                    <label asp-for="IdPersona" class="form-label">Persona</label>
+                    <select class="form-select" asp-for="IdPersona" asp-items="ViewBag.Personas">
+                        <option value="">Seleccione una persona</option>
+                    </select>
+                    <span asp-validation-for="IdPersona" class="text-danger"></span>
+                </div>
+
+                <!-- Turno -->
+                <div class="mb-3">
+                    <label asp-for="IdTurno" class="form-label">Turno</label>
+                    <select class="form-select" asp-for="IdTurno" asp-items="ViewBag.Turnos">
+                        <option value="">Seleccione un turno</option>
+                    </select>
+                    <span asp-validation-for="IdTurno" class="text-danger"></span>
+                </div>
+
+                <!-- Fecha de ingreso -->
+                <div class="mb-3">
+                    <label asp-for="FechaIngreso" class="form-label">Fecha de Ingreso</label>
+                    <input class="form-control" asp-for="FechaIngreso" type="date" />
+                    <span asp-validation-for="FechaIngreso" class="text-danger"></span>
+                </div>
+
+                <!-- Hora de ingreso -->
+                <div class="mb-3">
+                    <label asp-for="HoraIngreso" class="form-label">Hora de Ingreso</label>
+                    <input class="form-control" asp-for="HoraIngreso" type="time" />
+                    <span asp-validation-for="HoraIngreso" class="text-danger"></span>
+                </div>
+
+                <!-- Hora de salida -->
+                <div class="mb-3">
+                    <label asp-for="HoraSalida" class="form-label">Hora de Salida</label>
+                    <input class="form-control" asp-for="HoraSalida" type="time" />
+                    <span asp-validation-for="HoraSalida" class="text-danger"></span>
+                </div>
+
+                <!-- Botones -->
+                <div class="mb-3">
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                    <a asp-controller="RegistroAsistencia" asp-action="ListaAsistencia" class="btn btn-warning">Volver</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

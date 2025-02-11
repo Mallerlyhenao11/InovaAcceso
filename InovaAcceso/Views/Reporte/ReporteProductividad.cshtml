@@ -1,0 +1,115 @@
+﻿@model IEnumerable<InovaAcceso.Models.Reporte>
+
+@{
+    ViewData["Title"] = "Reporte de Productividad";
+}
+
+<div class="container-fluid px-4 mt-4">
+    <h4>Reporte de Productividad</h4>
+
+    <!-- Filtros -->
+    <div class="mb-3">
+        <label for="fechaInicio" class="form-label">Fecha de Inicio:</label>
+        <input type="date" id="fechaInicio" class="form-control" />
+
+        <label for="fechaFin" class="form-label">Fecha de Fin:</label>
+        <input type="date" id="fechaFin" class="form-control" />
+
+        <button class="btn btn-secondary mt-2">Filtrar</button>
+    </div>
+
+    <!-- Resumen General en Tarjetas -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card text-white bg-success mb-3">
+                <div class="card-header">Productividad Total</div>
+                <div class="card-body">
+                    <h5 class="card-title">@Model.Sum(x => x.Asistencias) %</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-white bg-info mb-3">
+                <div class="card-header">Promedio de Productividad</div>
+                <div class="card-body">
+                    <h5 class="card-title">@Model.Average(x => x.Asistencias) %</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-white bg-danger mb-3">
+                <div class="card-header">Mejor Periodo</div>
+                <div class="card-body">
+                    <h5 class="card-title">@Model.OrderByDescending(x => x.Asistencias).FirstOrDefault()?.Periodo</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabla de Datos -->
+    <table class="table table-striped table-bordered">
+        <thead class="table-light">
+            <tr>
+                <th>Periodo</th>
+                <th>Productividad (%)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Periodo</td>
+                    <td>@item.Asistencias</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <!-- Botones de Acción -->
+    <div class="mb-3">
+        <a class="btn btn-primary" asp-controller="Reporte" asp-action="MostrarPDFenPaginaProductividad" target="_blank">Ver PDF en pagina</a>
+        <a class="btn btn-primary" asp-action="DescargarPDFProductividad" asp-controller="Reporte">Descargar PDF</a>
+
+
+        <br />
+        <embed src="@Url.Action("MostrarPDFenPagina","Reporte")" width="800" height="400" type="application/pdf" />
+    </div>
+
+    <!-- Gráficos (ejemplo) -->
+    <div id="graficoProductividad" style="height: 400px;"></div>
+
+    <!-- Notas sobre el contexto -->
+    <div class="mt-4">
+        <h5>Notas:</h5>
+        <p>Aquí puedes agregar notas sobre factores que pudieron afectar la productividad.</p>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Aquí puedes agregar código JavaScript para generar gráficos con Chart.js o similar
+        // Ejemplo de inicialización de un gráfico de barras
+        var ctx = document.getElementById('graficoProductividad').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: @Html.Raw(Json.Serialize(Model.Select(x => x.Periodo))),
+                datasets: [{
+                    label: 'Productividad (%)',
+                    data: @Html.Raw(Json.Serialize(Model.Select(x => x.Asistencias))),
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+}

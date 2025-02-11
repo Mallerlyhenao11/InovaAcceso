@@ -1,0 +1,121 @@
+﻿@model InovaAcceso.Models.Login
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - InovaAcceso</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/InovaAcceso.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(to bottom right, #132A58, #574da7); /* Gradiente de fondo */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 400px;
+            padding: 2rem;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+            .login-container img {
+                height: 80px;
+                margin-bottom: 1rem;
+            }
+
+            .login-container h1 {
+                color: #574da7; /* Título */
+                margin-bottom: 1.5rem;
+            }
+
+        .input-group-text {
+            background-color: #18346d; /* Color de fondo de los iconos */
+            color: #ffffff;
+        }
+
+        .form-control {
+            border-radius: 8px;
+        }
+
+        .btn-primary {
+            background-color: #574da7; /* Botón de inicio de sesión */
+            border: none;
+            border-radius: 25px;
+        }
+
+            .btn-primary:hover {
+                background-color: #18346d; /* Color del botón en hover */
+            }
+
+        .form-check-label {
+            color: #18346d; /* Color del texto 'Recuérdame' */
+        }
+
+        .text-info1 {
+            color: #5548c5; /* Color del enlace '¿Olvidaste tu contraseña?' */
+        }
+
+        .alert-danger {
+            /*  background-color: #2b8fc8; /* Color de fondo de alerta de error */
+            /*  color: #ffffff; /* Color del texto de la alerta */
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="mb-4">
+            <img src="~/img/login.png" alt="login-icon" />
+        </div>
+        <h1>Bienvenido</h1>
+        <form asp-controller="Home" asp-action="Login" method="post">
+            <div class="mb-3">
+                <div class="input-group">
+                    <span class="input-group-text">
+                        <i class="fa-solid fa-envelope"></i>
+                    </span>
+                    <input asp-for="email" class="form-control" type="text"  required placeholder="Correo" />
+                </div>
+            </div>
+            <div class="mb-4">
+                <div class="input-group">
+                    <span class="input-group-text">
+                        <i class="fa-solid fa-lock"></i>
+                    </span>
+                    <input asp-for="clave" class="form-control" type="password" required placeholder="Contraseña" />
+                </div>
+            </div>
+            <div class="d-flex justify-content-between mb-4">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="rememberMe" />
+                    <label class="form-check-label" for="rememberMe">Recuérdame</label>
+                </div>
+                <a href="#" class="text-info1">¿Olvidaste tu contraseña?</a>
+            </div>
+            <button type="submit" class="btn btn-primary text-white fw-semibold w-100">Ingresar</button>
+            @if (ViewData["Mensaje"] != null)
+            {
+                <div class="alert alert-danger mt-4" role="alert">
+                    @ViewData["Mensaje"]
+                </div>
+            }
+        </form>
+    </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+</body>
+</html>

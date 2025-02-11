@@ -1,0 +1,77 @@
+﻿@model InovaAcceso.Models.Persona
+@{
+    ViewData["Title"] = "Editar Persona";
+}
+
+<div class="container-fluid px-4 mt-4">
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+        <li class="breadcrumb-item active">Editar Persona</li>
+    </ol>
+    <div class="row">
+        <div class="col-sm-8 offset-sm-2">
+            <form asp-controller="Persona" asp-action="EditarPersona" method="post">
+                <div class="mb-3">
+                    <input class="form-control" asp-for="IdPersona" type="hidden" />
+                    <input class="form-control" asp-for="IdTipoDoc" type="hidden" />
+                    <input class="form-control" asp-for="IdCargo" type="hidden" />
+                    <input class="form-control" asp-for="IdEstado" type="hidden" />
+                    <input class="form-control" asp-for="IdRol" type="hidden" />
+                </div>
+                <div class="mb-3">
+                    <label>Numero Documento</label>
+                    <input class="form-control" asp-for="NumeroDocumento" type="text" />
+                </div>
+                <div class="mb-3">
+                    <label>Primer Nombre</label>
+                    <input class="form-control" asp-for="PrimerNombre" type="text" />
+                </div>
+                <div class="mb-3">
+                    <label>Segundo Nombre</label>
+                    <input class="form-control" asp-for="SegundoNombre" type="text" />
+                </div>
+                <div class="mb-3">
+                    <label>Primer Apellido</label>
+                    <input class="form-control" asp-for="PrimerApellido" type="text" />
+                </div>
+                <div class="mb-3">
+                    <label>Segundo Apellido</label>
+                    <input class="form-control" asp-for="SegundoApellido" type="text" />
+                </div>
+                <div class="mb-3">
+                    <label>Fecha Nacimiento</label>
+                    <input class="form-control" asp-for="FechaNacimiento" type="date" />
+                </div>
+                <div class="mb-3">
+                    <label>Edad</label>
+                    <input class="form-control" asp-for="Edad" type="number" />
+                </div>
+                <div class="mb-3">
+                    <label>Sexo</label>
+                    <input class="form-control" asp-for="Sexo" type="text" />
+                </div>
+                <div class="mb-3">
+                    <label>Fecha Ingreso</label>
+                    <input class="form-control" asp-for="FechaIngreso" type="date" />
+                </div>
+                <div class="mb-3">
+                    <label>Dirección</label>
+                    <input class="form-control" asp-for="Direccion" type="text" />
+                </div>
+                <div class="mb-3">
+                    <label>Teléfono</label>
+                    <input class="form-control" asp-for="Telefono" type="tel" />
+                </div>
+                <div class="mb-3">
+                    <label>Email</label>
+                    <input class="form-control" asp-for="Email" type="email" />
+                </div>
+
+                <div class="mb-3">
+                    <button class="btn btn-primary" type="submit">Guardar</button>
+                    <a asp-controller="Persona" asp-action="ListaPersonas" class="btn btn-warning">Volver</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,78 @@
+﻿@model InovaAcceso.Models.GestionTurno;
+@using System.Security.Claims;
+@{
+    ViewData["Title"] = "Nuevo Estado";
+}
+<div class="container-fluid px-4 mt-4">
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+        <li class="breadcrumb-item active">Agregar Turno</li>
+    </ol>
+
+    <form asp-controller="GestionTurno" asp-action="asignarTurno" method="post">
+        <h4 class="w-auto px-2">Datos Personales</h4>
+        <div class="row">
+            <div class="col-md-4">
+
+                <div class="form-group">
+                    <label for="IdPersona">Persona</label>
+                    <select class="form-control" asp-for="IdPersona" asp-items="ViewBag.Personas"></select>
+                </div>
+
+                <div class="form-group">
+                    <label for="IdTurno">Turno</label>
+                    <select class="form-control" asp-for="IdTurno" asp-items="ViewBag.Turnos"></select>
+                </div>
+
+                <div class="form-group">
+                    <label for="FechaInicio">Fecha Inicio</label>
+                    <input class="form-control" asp-for="FechaInicio" type="date" />
+                </div>
+
+                <div class="form-group">
+                    <label for="FechaFin">Fecha Fin</label>
+                    <input class="form-control" asp-for="FechaFin" type="date" />
+                </div>
+            </div>
+        </div>
+
+        <!-- Campos ocultos -->
+        <input asp-for="FechaCreacion" class="form-control" type="datetime-local" hidden value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" />
+        <input asp-for="FechaModificacion" class="form-control" type="datetime-local" hidden value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" />
+        <input asp-for="ResponsableModificacion" class="form-control" type="text" hidden value="@User.Claims.Where(c => c.Type == ClaimTypes.Name).Select(c => c.Value).SingleOrDefault()" />
+
+        <!-- Botones de Acción -->
+        <div class="d-flex justify-content-center mb-2">
+            <button type="submit" class="btn btn-primary me-2">Guardar</button>
+            <a asp-controller="GestionTurno" asp-action="listaAsignacionDeTurno" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+
+<!-- Mensajes de éxito o error -->
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (TempData["MessageError"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+
+

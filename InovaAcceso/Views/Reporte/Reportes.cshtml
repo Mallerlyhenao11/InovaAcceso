@@ -1,0 +1,103 @@
+﻿@model InovaAcceso.Models.Persona
+
+@{
+    ViewData["Title"] = "Gestión de Reportes";
+}
+
+<div class="container-fluid px-4 mt-4">
+    <nav>
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item"><a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Gestión de Reportes</li>
+        </ol>
+    </nav>
+    <fieldset class="border p-2 mb-2">
+        <h4 class="w-auto px-2">Gestión de Reportes</h4>
+        <div class="row d-flex align-items-center mb-3">
+            <div class="col-md-4">
+                <a class="btn btn-secondary btn-lg w-100 fs-5" asp-controller="Reporte" asp-action="GenerarCertificadoLaboral">
+                    Generar Reporte de Certificado Laboral
+                </a>
+            </div>
+            <div class="col-md-4">
+                <a class="btn btn-secondary btn-lg w-100 fs-5" asp-controller="Reporte" asp-action="ReporteProductividad">
+                    Generar reporte productividad
+                </a>
+            </div>
+
+            <div class="col-md-4">
+                <button class="btn btn-secondary btn-lg w-100 fs-5">Generar reporte solicitudes cambio turno</button>
+            </div>
+        </div>
+        <div class="row d-flex align-items-center mb-3">
+            <div class="col-md-4">
+                <button class="btn btn-secondary btn-lg w-100 fs-5">Generar reporte cumplimiento laboral</button>
+            </div>
+            <div class="col-md-4">
+                <button class="btn btn-secondary btn-lg w-100 fs-5">Generar reporte Horarios</button>
+            </div>
+        </div>
+    </fieldset>
+    <fieldset class="border p-2 mb-2">
+        <form method="get">
+            <div class="row mb-3">
+                <div class="col-md-3">
+                    <label for="fechaInicial" class="form-label">Fecha inicial</label>
+                    <input type="date" id="fechaInicial" name="fechaInicial" class="form-control">
+                </div>
+                <div class="col-md-3">
+                    <label for="fechaFinal" class="form-label">Fecha Final</label>
+                    <input type="date" id="fechaFinal" name="fechaFinal" class="form-control">
+                </div>
+                <div class="col-md-3 d-flex align-items-end">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="todosUsuarios" name="todosUsuarios" checked>
+                        <label class="form-check-label" for="todosUsuarios">Todos los usuarios</label>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label for="documento" class="form-label">Documento</label>
+                    <input type="text" id="documento" name="documento" class="form-control">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i> Consultar</button>
+        </form>
+    </fieldset>
+    <fieldset class="border p-2 mb-2">
+        <div class="mt-4">
+            <table class="table table-bordered">
+                <thead class="table-light">
+                    <tr>
+                        <th>#</th>
+                        <th>First</th>
+                        <th>Last</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Mark</td>
+                        <td>Otto</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Jacob</td>
+                        <td>Thornton</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Larry</td>
+                        <td>the Bird</td>
+                    </tr>
+                </tbody>
+            </table>
+            <button class="btn btn-success"><i class="bi bi-download"></i> Descargar</button>
+        </div>
+    </fieldset>
+</div>
+<script>
+    function generarCertificadoLaboral() {
+        // Llamar a la acción del controlador para generar el certificado laboral
+        window.location.href = '@Url.Action("GenerarCertificadoLaboral", "Reporte")';
+    }
+</script>

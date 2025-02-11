@@ -1,0 +1,15 @@
+﻿@model InovaAcceso.Models.Persona
+
+@{
+    ViewData["Title"] = "Certificado Laboral";
+}
+
+<div class="text-center">
+
+    <a class="btn btn-primary" asp-controller="Reporte" asp-action="MostrarPDFenPagina" target="_blank">Ver PDF en pagina</a>
+    <a class="btn btn-primary" asp-controller="Reporte" asp-action="DescargarPDF">Descargar PDF</a>
+
+    <br />
+    <embed src="@Url.Action("MostrarPDFenPagina","Reporte")" width="800" height="400" type="application/pdf" />
+
+</div>

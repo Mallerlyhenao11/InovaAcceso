@@ -1,0 +1,90 @@
+﻿@model PaginatedList<InovaAcceso.Models.TipoDocumento>;
+@{
+    ViewData["Title"] = "Tipo Documento";
+}
+<div class="container-fluid px-4 mt-4">
+    <nav>
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item"><a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Lista de Tipos De Documentos</li>
+        </ol>
+    </nav>
+    <a asp-controller="TipoDocumento" asp-action="NuevoTipoDoc" class="btn btn-success mb-3">Nuevo</a>
+    <!-- Alertas -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (TempData["MessageError"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <!-- Fin Alertas -->
+    <div class="row">
+        <div class="col-md-12">
+            <form method="get">
+                <div class="input-group mb-3">
+                    <input type="text" name="searchString" class="form-control" placeholder="Buscar por tipo de documento" value="@ViewData["CurrentFilter"]" />
+                    <button class="btn btn-outline-secondary" type="submit">Buscar</button>
+                </div>
+            </form>
+            <div class="card-body">
+                <table class="table table-striped table-responsive">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Documento</th>
+                            <th>Fecha Creacion</th>
+                            <th>Fecha Modificacion</th>
+                            <th>Responsable Modificacion</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.Documento</td>
+                                <td>@item.FechaCreacion</td>
+                                <td>@item.FechaModificacion</td>
+                                <td>@item.ResponsableModificacion</td>
+
+                                <td>
+                                    <a asp-controller="TipoDocumento" asp-route-id="@item.IdTipoDoc" asp-action="EditarTipoDoc" class="btn btn-primary mb-3">Editar</a>
+                                    <a asp-controller="TipoDocumento" asp-route-id="@item.IdTipoDoc" asp-action="EliminarTipoDoc" onclick="return confirmar()" class="btn btn-danger mb-3">Eliminar</a>
+                                </td>
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts
+{
+    <Script>
+        function confirmar() {
+            return confirm("Estar seguro de eliminar el tipo de documento?")
+        }
+    </Script>
+
+}
+

@@ -1,0 +1,114 @@
+﻿@model InovaAcceso.Models.RegistroAsistencia
+@using System.Security.Claims;
+
+<div class="container-fluid px-4 mt-4">
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+        <li class="breadcrumb-item active">Agregar Asistencia</li>
+    </ol>
+
+    <!-- Alertas -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <form asp-controller="Asistencia" asp-action="AgregarAsistencia" method="post">
+        <!-- Datos de Asistencia -->
+        <fieldset class="border p-2 mb-2">
+            <h4 class="w-auto px-2">Datos de Asistencia</h4>
+            <div class="row">
+                <!-- Primera columna -->
+                <div class="col-md-4">
+                    <div class="mb-2">
+                        <label class="px-2" for="idPersona">Persona</label>
+                        <select asp-for="IdPersona" asp-items="ViewBag.Personas" class="form-select">
+                            <option value="">Seleccione una persona</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Segunda columna -->
+                <div class="col-md-4">
+                    <div class="mb-2">
+                        <label class="px-2" for="idTurno">Turno</label>
+                        <select asp-for="IdTurno" asp-items="ViewBag.Turnos" class="form-select">
+                            <option value="">Seleccione un turno</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Tercera columna -->
+                <div class="col-md-4">
+                    <div class="mb-2">
+                        <label class="px-2" for="fechaIngreso">Fecha de Ingreso</label>
+                        <input asp-for="FechaIngreso" class="form-control" type="date" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Hora de Ingreso -->
+                <div class="col-md-6">
+                    <div class="mb-2">
+                        <label class="px-2" for="horaIngreso">Hora de Ingreso</label>
+                        <input asp-for="HoraIngreso" class="form-control" type="time" />
+                    </div>
+                </div>
+
+                <!-- Hora de Salida -->
+                <div class="col-md-6">
+                    <div class="mb-2">
+                        <label class="px-2" for="horaSalida">Hora de Salida</label>
+                        <input asp-for="HoraSalida" class="form-control" type="time" />
+                    </div>
+                </div>
+            </div>
+                            <div class="col-md-4">
+                    <input asp-for="FechaCreacion" class="form-control" type="datetime-local" hidden value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" />
+                    <input asp-for="FechaModificacion" class="form-control" type="datetime-local" hidden value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" />
+                    <input asp-for="ResponsableModificacion" class="form-control" type="text" hidden value="@User.Claims.Where(c => c.Type == ClaimTypes.Name).Select(c => c.Value).SingleOrDefault()" />
+                </div>
+        </fieldset>
+
+        <div class="d-flex justify-content-center mb-2">
+            <button type="submit" class="btn btn-primary me-2">Guardar</button>
+            <a asp-controller="Asistencia" asp-action="ListaAsistencia" class="btn btn-secondary">Cancelar</a>
+        </div>
+
+    </form>
+
+
+
+</div>
+
+<script>
+    // Ocultar alertas automáticamente después de 5 segundos
+    setTimeout(function () {
+        let alertElement = document.querySelector('.alert-dismissible');
+        if (alertElement) {
+            let alert = new bootstrap.Alert(alertElement);
+            alert.close();
+        alert.close();
+        }
+    }, 5000);
+</script>
