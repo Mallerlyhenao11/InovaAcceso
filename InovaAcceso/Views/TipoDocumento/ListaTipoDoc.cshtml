@@ -9,7 +9,9 @@
             <li class="breadcrumb-item active" aria-current="page">Lista de Tipos De Documentos</li>
         </ol>
     </nav>
-    <a asp-controller="TipoDocumento" asp-action="NuevoTipoDoc" class="btn btn-success mb-3">Nuevo</a>
+    <a asp-controller="TipoDocumento" asp-action="NuevoTipoDoc" class="btn mb-3" style="background-color: #2b8fc8; border-color: #2b8fc8; color: white;">
+        <i class="bi bi-person-add"></i> Nuevo
+    </a>
     <!-- Alertas -->
     @if (TempData["SuccessMessage"] != null)
     {
@@ -65,8 +67,12 @@
                                 <td>@item.ResponsableModificacion</td>
 
                                 <td>
-                                    <a asp-controller="TipoDocumento" asp-route-id="@item.IdTipoDoc" asp-action="EditarTipoDoc" class="btn btn-primary mb-3">Editar</a>
-                                    <a asp-controller="TipoDocumento" asp-route-id="@item.IdTipoDoc" asp-action="EliminarTipoDoc" onclick="return confirmar()" class="btn btn-danger mb-3">Eliminar</a>
+                                    <a asp-controller="TipoDocumento" asp-route-id="@item.IdTipoDoc" asp-action="EditarTipoDoc" class="btn btn-sm" style="background-color: #2b8fc8; border-color: #2b8fc8; color: white;">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
+                                    <a asp-controller="TipoDocumento" asp-route-id="@item.IdTipoDoc" asp-action="EliminarTipoDoc" onclick="return confirmar()" class="btn btn-sm" style="background-color: #574da7; border-color: #574da7; color: white;">
+                                        <i class="bi bi-trash3"></i>
+                                    </a>
                                 </td>
 
                             </tr>

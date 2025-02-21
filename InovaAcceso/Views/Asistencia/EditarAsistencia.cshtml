@@ -60,11 +60,20 @@
                 </div>
 
                 <!-- Botones -->
+                <!-- Botones -->
                 <div class="mb-3">
-                    <button type="submit" class="btn btn-primary">Guardar</button>
-                    <a asp-controller="Asistencia" asp-action="ListaAsistencia" class="btn btn-warning">Volver</a>
+                    <!-- Botón de guardar -->
+                    <button type="submit" class="btn" style="background-color: #2b8fc8; border-color: #2b8fc8; color: white;">
+                        <i class="bi bi-save"></i> Guardar
+                    </button>
 
+                    <!-- Botón de volver -->
+                    <a asp-controller="Asistencia" asp-action="ListaAsistencia" class="btn" style="background-color: #ffc107; border-color: #ffc107; color: black;">
+                        <i class="bi bi-arrow-left"></i> Volver
+                    </a>
                 </div>
+
+
             </form>
         </div>
     </div>

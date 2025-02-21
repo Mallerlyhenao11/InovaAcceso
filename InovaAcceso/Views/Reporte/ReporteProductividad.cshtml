@@ -69,47 +69,9 @@
     <div class="mb-3">
         <a class="btn btn-primary" asp-controller="Reporte" asp-action="MostrarPDFenPaginaProductividad" target="_blank">Ver PDF en pagina</a>
         <a class="btn btn-primary" asp-action="DescargarPDFProductividad" asp-controller="Reporte">Descargar PDF</a>
-
-
-        <br />
-        <embed src="@Url.Action("MostrarPDFenPagina","Reporte")" width="800" height="400" type="application/pdf" />
+           
     </div>
-
-    <!-- Gráficos (ejemplo) -->
-    <div id="graficoProductividad" style="height: 400px;"></div>
-
-    <!-- Notas sobre el contexto -->
-    <div class="mt-4">
-        <h5>Notas:</h5>
-        <p>Aquí puedes agregar notas sobre factores que pudieron afectar la productividad.</p>
-    </div>
+    
 </div>
 
-@section Scripts {
-    <script>
-        // Aquí puedes agregar código JavaScript para generar gráficos con Chart.js o similar
-        // Ejemplo de inicialización de un gráfico de barras
-        var ctx = document.getElementById('graficoProductividad').getContext('2d');
-        var myChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: @Html.Raw(Json.Serialize(Model.Select(x => x.Periodo))),
-                datasets: [{
-                    label: 'Productividad (%)',
-                    data: @Html.Raw(Json.Serialize(Model.Select(x => x.Asistencias))),
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-    </script>
-}
+

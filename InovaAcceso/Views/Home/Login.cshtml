@@ -70,8 +70,8 @@
         }
 
         .alert-danger {
-            /*  background-color: #2b8fc8; /* Color de fondo de alerta de error */
-            /*  color: #ffffff; /* Color del texto de la alerta */
+            background-color: #f8d7da; /* Color de fondo de alerta de error */
+            color: #721c24; /* Color del texto de la alerta */
         }
     </style>
 </head>
@@ -87,21 +87,23 @@
                     <span class="input-group-text">
                         <i class="fa-solid fa-envelope"></i>
                     </span>
-                    <input asp-for="email" class="form-control" type="text"  required placeholder="Correo" />
+                    <input asp-for="Email" class="form-control" type="text" required placeholder="Correo" />
                 </div>
+                <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="mb-4">
                 <div class="input-group">
                     <span class="input-group-text">
                         <i class="fa-solid fa-lock"></i>
                     </span>
-                    <input asp-for="clave" class="form-control" type="password" required placeholder="Contraseña" />
+                    <input asp-for="Clave" class="form-control" type="password" required placeholder="Contraseña" />
                 </div>
+                <span asp-validation-for="Clave" class="text-danger"></span>
             </div>
             <div class="d-flex justify-content-between mb-4">
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="rememberMe" />
-                    <label class="form-check-label" for="rememberMe">Recuérdame</label>
+                    <input asp-for="RememberMe" class="form-check-input" type="checkbox" id="recuerdame" />
+                    <label class="form-check-label" for="recuerdame">Recuérdame</label>
                 </div>
                 <a href="#" class="text-info1">¿Olvidaste tu contraseña?</a>
             </div>

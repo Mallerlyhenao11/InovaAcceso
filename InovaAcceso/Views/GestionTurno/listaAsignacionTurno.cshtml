@@ -11,7 +11,9 @@
             <li class="breadcrumb-item active" aria-current="page">Lista de Turnos Asignados</li>
         </ol>
     </nav>
-    <a asp-controller="GestionTurno" asp-action="asignarTurno" class="btn btn-success mb-3" data-toggle="modal" data-target="#asignarTurnoModal">Asignar Turno</a>
+    <a asp-controller="GestionTurno" asp-action="asignarTurno" data-toggle="modal" data-target="#asignarTurnoModal" class="btn mb-3" style="background-color: #2b8fc8; border-color: #2b8fc8; color: white;">
+        <i class="bi bi-person-add"></i> Nuevo
+    </a>
     <!-- Alertas -->
     @if (TempData["SuccessMessage"] != null)
     {
@@ -21,7 +23,7 @@
         </div>
     }
 
-    @if (TempData["MessageError"] != null)
+    @if (TempData["ErrorMessage"] != null)
     {
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
             @TempData["ErrorMessage"]
@@ -67,8 +69,13 @@
                             <td>@item.FechaFin</td>
                             <td>@item.ResponsableModificacion</td>
                             <td>
-                                <a asp-controller="GestionTurno" asp-action="editarAsignacionTurno" asp-route-id="@item.IdGestionTurno" class="btn btn-sm btn-primary">Editar</a>
-                                <a asp-controller="GestionTurno" asp-action="EliminarTurnoConfirmado" asp-route-id="@item.IdGestionTurno" class="btn btn-sm btn-danger" onclick="return confirmar();">Eliminar</a>
+                                <a asp-controller="GestionTurno" asp-action="editarAsignacionTurno" asp-route-id="@item.IdGestionTurno" class="btn btn-sm" style="background-color: #2b8fc8; border-color: #2b8fc8; color: white;">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
+
+                                <a asp-controller="GestionTurno" asp-action="EliminarTurnoConfirmado" asp-route-id="@item.IdGestionTurno" onclick="return confirmar();" class="btn btn-sm" style="background-color: #574da7; border-color: #574da7; color: white;">
+                                    <i class="bi bi-trash3"></i>
+                                </a>
                             </td>
                         </tr>
                     }

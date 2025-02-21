@@ -11,7 +11,9 @@
             <li class="breadcrumb-item active" aria-current="page">Asistencias</li>
         </ol>
     </nav>
-    <a asp-controller="Asistencia" asp-action="AgregarAsistencia" class="btn btn-success mb-3">Nuevo</a>
+    <a asp-controller="Asistencia" asp-action="AgregarAsistencia" class="btn mb-3" style="background-color: #2b8fc8; border-color: #2b8fc8; color: white;">
+        <i class="bi bi-person-add"></i> Nuevo
+    </a>
 
     <!-- Alertas -->
     @if (TempData["SuccessMessage"] != null)
@@ -62,9 +64,10 @@
                             <td>@item.HoraIngreso</td>
                             <td>@item.HoraSalida</td>
                             <td>
-                                <a asp-action="EditarAsistencia" asp-route-id="@item.IdRegistro" class="btn btn-sm btn-primary">Editar</a>
+                                <a asp-action="EditarAsistencia" asp-route-id="@item.IdRegistro" class="btn btn-sm" style="background-color: #2b8fc8; border-color: #2b8fc8; color: white;">
+                                    <i class="bi bi-pencil-square"></i></a>
                                 <form asp-action="EliminarAsistencia" asp-route-id="@item.IdRegistro" method="post" style="display:inline;" onsubmit="return confirmar();">
-                                    <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+                                    <button type="submit" class="btn btn-sm" style="background-color: #574da7; border-color: #574da7; color: white;"><i class="bi bi-trash3"></i></button>
                                 </form>
                             </td>
                         </tr>

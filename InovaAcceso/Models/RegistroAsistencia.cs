@@ -21,5 +21,6 @@ namespace InovaAcceso.Models
         public DateTime FechaCreacion { get; set; }
         public DateTime FechaModificacion { get; set; }
         public required string ResponsableModificacion { get; set; }
+
     }
 }

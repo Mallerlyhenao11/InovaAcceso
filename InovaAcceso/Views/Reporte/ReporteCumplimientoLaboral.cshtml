@@ -1,0 +1,46 @@
+﻿@model List<InovaAcceso.Models.RegistroAsistencia>
+
+@{
+    ViewData["Title"] = "Reporte de Cumplimiento Laboral";
+}
+
+<div class="container-fluid px-4 mt-4">
+    <nav>
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item"><a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Reporte de Cumplimiento Laboral</li>
+        </ol>
+    </nav>
+
+        <h4 class="w-auto px-2">Reporte de Cumplimiento Laboral</h4>
+        <table class="table table-bordered table-hover mt-3">
+            <thead class="table-dark">
+                <tr>
+                    <th>Empleado</th>
+                    <th>Fecha</th>
+                    <th>Ingreso</th>
+                    <th>Salida</th>
+                    <th>Tardanza</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var registro in Model)
+                {
+                    <tr>
+                        <td>@registro.Persona.NombreCompleto</td>                        
+                        <td>@registro.FechaIngreso.ToString("dd/MM/yyyy")</td>
+                        <td>@registro.HoraIngreso</td>
+                        <td>@registro.HoraSalida</td>
+                        <td class="@(registro.LlegadaTarde ? "text-danger" : "text-success")">
+                            @(registro.LlegadaTarde ? $"{registro.Tardanza} min tarde" : "A tiempo")
+                        </td>
+                      </tr>
+                }
+            </tbody>
+        </table>
+    <div class="mb-3">
+        <a asp-controller="Reporte" asp-action="ExportarExcel" class="btn btn-success">
+            Exportar a Excel
+        </a>
+        </div>
+</div>

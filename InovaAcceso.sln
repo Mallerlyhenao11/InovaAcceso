@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35219.272
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InovaAcceso", "InovaAcceso\InovaAcceso.csproj", "{8075CAAF-A391-4BD6-98C6-1BCE4E008CAC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InovaAcceso", "InovaAcceso\InovaAcceso.csproj", "{9B033A03-A206-4EB4-A4BF-44017D64B329}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +11,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{8075CAAF-A391-4BD6-98C6-1BCE4E008CAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8075CAAF-A391-4BD6-98C6-1BCE4E008CAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8075CAAF-A391-4BD6-98C6-1BCE4E008CAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8075CAAF-A391-4BD6-98C6-1BCE4E008CAC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B033A03-A206-4EB4-A4BF-44017D64B329}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B033A03-A206-4EB4-A4BF-44017D64B329}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B033A03-A206-4EB4-A4BF-44017D64B329}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B033A03-A206-4EB4-A4BF-44017D64B329}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

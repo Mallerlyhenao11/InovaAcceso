@@ -35,47 +35,64 @@ namespace InovaAcceso.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(Login login)
         {
+            // Validar el modelo
+            if (!ModelState.IsValid)
+            {
+                ViewData["Mensaje"] = "Por favor, complete todos los campos correctamente.";
+                return View(login);
+            }
+
+            // Buscar al usuario en la base de datos
             Persona persona_encontrada = await _appDbContext.Personas
-                .Where(u => u.Email == login.email)
+                .Where(u => u.Email == login.Email)
                 .FirstOrDefaultAsync();
 
             if (persona_encontrada == null)
             {
-                ViewData["Mensaje"] = "No se encontró el usuario";
-                return View();
+                ViewData["Mensaje"] = "No se encontró el usuario.";
+                return View(login);
             }
 
-            if (BCrypt.Net.BCrypt.Verify(login.clave, System.Text.Encoding.UTF8.GetString(persona_encontrada.Contrasena)))
+            // Verificar la contraseña
+            if (!BCrypt.Net.BCrypt.Verify(login.Clave, System.Text.Encoding.UTF8.GetString(persona_encontrada.Contrasena)))
             {
-                Console.WriteLine("La contraseña es válida");
-            }
-            else
-            {
-                ViewData["Mensaje"] = "Credenciales incorrectas";
-                return View();
+                ViewData["Mensaje"] = "Credenciales incorrectas.";
+                return View(login);
             }
 
-            List<Claim> claim = new List<Claim>()
+            // Crear los claims (información del usuario autenticado)
+            List<Claim> claims = new List<Claim>()
             {
                 new Claim(ClaimTypes.Email, persona_encontrada.Email),
                 new Claim(ClaimTypes.Name, persona_encontrada.PrimerNombre + " " + persona_encontrada.PrimerApellido)
             };
 
-            ClaimsIdentity claimsIdentity = new ClaimsIdentity(claim, CookieAuthenticationDefaults.AuthenticationScheme);
+            // Crear la identidad del usuario
+            ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+            // Configurar las propiedades de la autenticación
             AuthenticationProperties properties = new AuthenticationProperties()
             {
-                AllowRefresh = true,
+                AllowRefresh = true, // Permitir que se renueven las cookies
+                IsPersistent = login.RememberMe, // Depende de la opción "Recuérdame"
+                ExpiresUtc = login.RememberMe ? DateTime.UtcNow.AddDays(7) : DateTime.UtcNow.AddHours(1) // 7 días o 1 hora
             };
 
+            // Iniciar la sesión del usuario
             await HttpContext.SignInAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(claimsIdentity),
                 properties
             );
 
+            // Redirigir al usuario a la página que intentó acceder antes de iniciar sesión (si corresponde)
+            if (!string.IsNullOrEmpty(Request.Query["ReturnUrl"]))
+            {
+                return Redirect(Request.Query["ReturnUrl"]);
+            }
+
             return RedirectToAction("Index", "Home");
         }
-
 
         [HttpGet]
         public async Task<IActionResult> Index()
@@ -107,11 +124,18 @@ namespace InovaAcceso.Controllers
             return View();
         }
 
+        // Acción para cerrar sesión
         [HttpGet]
         public async Task<IActionResult> Salir()
         {
+            // Cierra la sesión del usuario
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            // Redirige al usuario a la página de inicio de sesión
             return RedirectToAction("Login", "Home");
         }
+
+        
+
     }
 }

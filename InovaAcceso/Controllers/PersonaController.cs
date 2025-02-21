@@ -72,18 +72,18 @@ namespace InovaAcceso.Controllers
                 await _appDbContext.Personas.AddAsync(persona);
                 await _appDbContext.SaveChangesAsync();
                 
-                /*
+                
                 var emailSender = HttpContext.RequestServices.GetRequiredService<IEmailSender>();
                 string subject = "Tus credenciales de acceso";
                 string body = $"Hola {persona.PrimerNombre},<br/><br/>Tu cuenta ha sido creada con éxito.<br/>Número de Documento: {persona.NumeroDocumento}<br/>Contraseña: {passwordInput}<br/><br/>Saludos,<br/>Tu equipo";
                 await emailSender.SendEmailAsync(persona.Email, subject, body);
-                */
+                
                 TempData["SuccessMessage"] = "Persona agregada exitosamente.";
                 return RedirectToAction(nameof(ListaPersonas));
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = "No se pudo guardar la persona. Inténtalo de nuevo. " + ex.Message;
+                TempData["ErrorMessage"] = "No se pudo guardar la persona. Inténtalo de nuevo. "+ ex.InnerException?.Message + ex.Message;
                 CargarListasDeSeleccion();
                 return View(persona);
             }
