@@ -37,17 +37,19 @@
                 <div class="col-md-4">
                     <div class="mb-2">
                         <label class="px-2" for="idTipoDoc">Tipo de Documento</label>
-                        <select asp-for="IdTipoDoc" asp-items="ViewBag.TipoDocs" class="form-select"></select>
+                        <select asp-for="IdTipoDoc" asp-items="ViewBag.TipoDocs" class="form-select" required>
+                            <option value="">Seleccione una opción</option>
+                        </select>
                     </div>
 
                     <div class="mb-2">
                         <label class="px-2" for="primerNombre">Primer Nombre</label>
-                        <input asp-for="PrimerNombre" class="form-control" type="text" />
+                        <input asp-for="PrimerNombre" class="form-control" type="text" required />
                     </div>
 
                     <div class="mb-2">
                         <label class="px-2" for="primerApellido">Primer Apellido</label>
-                        <input asp-for="PrimerApellido" class="form-control" type="text" />
+                        <input asp-for="PrimerApellido" class="form-control" type="text" required/>
                     </div>
 
                 </div>
@@ -56,12 +58,12 @@
 
                     <div class="mb-2">
                         <label class="px-2" for="numeroDocumento">Número de Documento</label>
-                        <input asp-for="NumeroDocumento" class="form-control" type="number" />
+                        <input asp-for="NumeroDocumento" class="form-control" type="number" required />
                     </div>
 
                     <div class="mb-2">
                         <label class="px-2" for="segundoNombre">Segundo Nombre</label>
-                        <input asp-for="SegundoNombre" class="form-control" type="text" />
+                        <input asp-for="SegundoNombre" class="form-control" type="text" required />
                     </div>
 
                     <div class="mb-2">
@@ -127,7 +129,9 @@
                 <div class="col-md-4">
                     <div class="mb-2">
                         <label class="px-2" for="idCargo">Cargo</label>
-                        <select asp-for="IdCargo" asp-items="ViewBag.Cargos" class="form-select"></select>
+                        <select asp-for="IdCargo" asp-items="ViewBag.Cargos" class="form-select">
+                            <option value="">Seleccione una opción</option>
+                        </select>
                     </div>
                     <div class="mb-2">
                         <label class="px-2" for="fechaIngreso">Fecha de Ingreso</label>
@@ -137,13 +141,17 @@
                 <div class="col-md-4">
                     <div class="mb-2">
                         <label class="px-2" for="idRol">Rol</label>
-                        <select asp-for="IdRol" asp-items="ViewBag.Roles" class="form-select"></select>
+                        <select asp-for="IdRol" asp-items="ViewBag.Roles" class="form-select">
+                            <option value="">Seleccione una opción</option>
+                        </select>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="mb-2">
                         <label class="px-2" for="idEstado">Estado</label>
-                        <select asp-for="IdEstado" asp-items="ViewBag.Estados" class="form-select"></select>
+                        <select asp-for="IdEstado" asp-items="ViewBag.Estados" class="form-select">
+                            <option value="">Seleccione una opción</option>
+                        </select>
                     </div>
                 </div>
                 <div class="col-md-4">

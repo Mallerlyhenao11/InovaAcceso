@@ -2,33 +2,30 @@ using InovaAcceso.Data;
 using InovaAcceso.Models;
 using InovaAcceso.Service;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using DinkToPdf;
 using DinkToPdf.Contracts;
 using InovaAcceso.Extension;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddControllersWithViews();
+// Se agrega la autenticación por cookies
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Home/Login"; // Ruta de inicio de sesión
+        options.LogoutPath = "/Home/Logout"; // Ruta de cierre de sesión
+        options.AccessDeniedPath = "/Home/AccessDenied"; // Ruta de acceso denegado
+    });
 
 // Configurar servicios
-builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
-builder.Services.AddTransient<IEmailSender, EmailSender>();
+builder.Services.AddAuthorization();
+builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<AppDBContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("CadenaSql"));
-});
-
-// Se agrega la autenticación por cookies
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-.AddCookie(options =>
-{
-    options.LoginPath = "/Home/Login"; // Ruta de inicio de sesión
-    options.LogoutPath = "/Home/Logout"; // Ruta de cierre de sesión
-    options.ExpireTimeSpan = TimeSpan.FromMinutes(5); // Tiempo de expiración de la cookie
 });
 
 // Se agrega para la autenticación de la librería del PDF
@@ -38,17 +35,25 @@ builder.Services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new 
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+// Configuración del middleware
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+}
+else
 {
     app.UseExceptionHandler("/Home/Error");
+    app.UseHsts();
 }
+
+app.UseHttpsRedirection();
 app.UseStaticFiles();
 
+// Configurar el pipeline de la aplicación
 app.UseRouting();
 app.UseAuthentication(); // Habilitar autenticación
 app.UseAuthorization(); // Habilitar autorización
-
+// Configurar rutas por defecto
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Login}/{id?}");

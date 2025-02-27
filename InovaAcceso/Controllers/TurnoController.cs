@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace InovaAcceso.Controllers
 {
-    //[Authorize]
+    [Authorize(Roles = "Admin")]
     public class TurnoController : Controller
     {
         private readonly AppDBContext _appDbContext;

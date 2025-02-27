@@ -54,16 +54,20 @@ namespace InovaAcceso.Controllers
             }
 
             // Verificar la contraseña
-            if (!BCrypt.Net.BCrypt.Verify(login.Clave, System.Text.Encoding.UTF8.GetString(persona_encontrada.Contrasena)))
+            if (!BCrypt.Net.BCrypt.Verify(login.Clave, persona_encontrada.Contrasena))
             {
                 ViewData["Mensaje"] = "Credenciales incorrectas.";
                 return View(login);
             }
-
+            var rol = await _appDbContext.Rols
+                .Where(r => r.IdRol == persona_encontrada.IdRol)
+                .Select(r => r.NombreRol)
+                .FirstOrDefaultAsync();
             // Crear los claims (información del usuario autenticado)
-            List<Claim> claims = new List<Claim>()
+            var claims = new List<Claim>()
             {
                 new Claim(ClaimTypes.Email, persona_encontrada.Email),
+                new Claim(ClaimTypes.Role, rol), // 
                 new Claim(ClaimTypes.Name, persona_encontrada.PrimerNombre + " " + persona_encontrada.PrimerApellido)
             };
 
@@ -93,6 +97,7 @@ namespace InovaAcceso.Controllers
 
             return RedirectToAction("Index", "Home");
         }
+
 
         [HttpGet]
         public async Task<IActionResult> Index()
@@ -135,7 +140,7 @@ namespace InovaAcceso.Controllers
             return RedirectToAction("Login", "Home");
         }
 
-        
+
 
     }
 }

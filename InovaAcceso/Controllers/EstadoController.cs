@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace InovaAcceso.Controllers
 {
-    //[Authorize]
+    [Authorize(Roles = "Admin")]
     public class EstadoController : Controller
     {
         private readonly AppDBContext _appDbContext;

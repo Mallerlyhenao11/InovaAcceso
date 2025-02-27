@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace InovaAcceso.Controllers
 {
-    //[Authorize]
+    [Authorize(Roles = "Admin")]
     public class GestionTurnoController : Controller
 	{
 		private readonly AppDBContext _appDbContext;

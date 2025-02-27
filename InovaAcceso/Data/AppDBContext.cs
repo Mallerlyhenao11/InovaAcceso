@@ -1,16 +1,16 @@
 ﻿using InovaAcceso.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System.ComponentModel;
 
 namespace InovaAcceso.Data
 {
-    public class AppDBContext : DbContext
+    public class AppDBContext : IdentityDbContext<IdentityUser>
     {
         public AppDBContext(DbContextOptions<AppDBContext> options) : base(options)
-        {
-
+        { 
+        
         }
-
         public DbSet<Cargo> Cargos { get; set; }
         public DbSet<Estado> Estados { get; set; }
         public DbSet<TipoDocumento> TipoDocumentos { get; set; }
@@ -22,61 +22,57 @@ namespace InovaAcceso.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //base.OnModelCreating(modelBuilder);
+            base.OnModelCreating(modelBuilder); // Asegúrate de llamar a la base para configurar las entidades de Identity
+
+            // Configuración de la tabla Rol
             modelBuilder.Entity<Rol>(tb =>
             {
                 tb.HasKey(col => col.IdRol);
                 tb.Property(col => col.IdRol)
-                .UseIdentityColumn()
-                .ValueGeneratedOnAdd();
-
+                    .UseIdentityColumn()
+                    .ValueGeneratedOnAdd();
                 tb.Property(col => col.NombreRol).HasMaxLength(50);
                 tb.Property(col => col.FechaCreacion);
                 tb.Property(col => col.FechaModificacion);
                 tb.Property(col => col.ResponsableModificacion).HasMaxLength(100);
-
             });
             modelBuilder.Entity<Rol>().ToTable("Rol");
 
+            // Configuración de la tabla Cargo
             modelBuilder.Entity<Cargo>(tb =>
             {
                 tb.HasKey(col => col.IdCargo);
                 tb.Property(col => col.IdCargo)
-                .UseIdentityColumn()
-                .ValueGeneratedOnAdd();
-
+                    .UseIdentityColumn()
+                    .ValueGeneratedOnAdd();
                 tb.Property(col => col.NombreCargo).HasMaxLength(50);
                 tb.Property(col => col.FechaCreacion);
                 tb.Property(col => col.FechaModificacion);
                 tb.Property(col => col.ResponsableModificacion).HasMaxLength(100);
-
             });
             modelBuilder.Entity<Cargo>().ToTable("Cargo");
 
-            //La tabla estado
+            // Configuración de la tabla Estado
             modelBuilder.Entity<Estado>(tb =>
             {
                 tb.HasKey(col => col.IdEstado);
                 tb.Property(col => col.IdEstado)
-                .UseIdentityColumn()
-                .ValueGeneratedOnAdd();
-
+                    .UseIdentityColumn()
+                    .ValueGeneratedOnAdd();
                 tb.Property(col => col.NombreEstado).HasMaxLength(50);
                 tb.Property(col => col.FechaCreacion);
                 tb.Property(col => col.FechaModificacion);
                 tb.Property(col => col.ResponsableModificacion).HasMaxLength(100);
-
             });
             modelBuilder.Entity<Estado>().ToTable("Estado");
 
-            //La tabla TipoDocumento
+            // Configuración de la tabla TipoDocumento
             modelBuilder.Entity<TipoDocumento>(tb =>
             {
                 tb.HasKey(col => col.IdTipoDoc);
                 tb.Property(col => col.IdTipoDoc)
-                .UseIdentityColumn()
-                .ValueGeneratedOnAdd();
-
+                    .UseIdentityColumn()
+                    .ValueGeneratedOnAdd();
                 tb.Property(col => col.Documento).HasMaxLength(50);
                 tb.Property(col => col.FechaCreacion);
                 tb.Property(col => col.FechaModificacion);
@@ -84,14 +80,13 @@ namespace InovaAcceso.Data
             });
             modelBuilder.Entity<TipoDocumento>().ToTable("TipoDocumento");
 
-            //La tabla Turno
+            // Configuración de la tabla Turno
             modelBuilder.Entity<Turno>(tb =>
             {
                 tb.HasKey(col => col.IdTurno);
                 tb.Property(col => col.IdTurno)
-                .UseIdentityColumn()
-                .ValueGeneratedOnAdd();
-
+                    .UseIdentityColumn()
+                    .ValueGeneratedOnAdd();
                 tb.Property(col => col.NombreTurno).HasMaxLength(50);
                 tb.Property(col => col.HoraIngreso).HasColumnType("time(0)");
                 tb.Property(col => col.HoraSalida).HasColumnType("time(0)");
@@ -102,10 +97,10 @@ namespace InovaAcceso.Data
                 tb.Property(col => col.ResponsableModificacion).HasMaxLength(100);
             });
             modelBuilder.Entity<Turno>().ToTable("Turno");
-            // La tabla Persona
+
+            // Configuración de la tabla Persona
             modelBuilder.Entity<Persona>(tb =>
             {
-                
                 tb.HasKey(col => col.IdPersona);
                 tb.Property(col => col.IdPersona)
                     .UseIdentityColumn()
@@ -113,17 +108,17 @@ namespace InovaAcceso.Data
 
                 tb.Property(col => col.NumeroDocumento).IsRequired();
                 tb.Property(col => col.PrimerNombre).IsRequired().HasMaxLength(100);
-                tb.Property(col => col.SegundoNombre) .HasMaxLength(100);
+                tb.Property(col => col.SegundoNombre).HasMaxLength(100);
                 tb.Property(col => col.PrimerApellido).IsRequired().HasMaxLength(100);
                 tb.Property(col => col.SegundoApellido).HasMaxLength(100);
                 tb.Property(col => col.FechaNacimiento).HasColumnType("date");
                 tb.Property(col => col.Edad).IsRequired();
-                tb.Property(col => col.Sexo).IsRequired() .HasMaxLength(10);
+                tb.Property(col => col.Sexo).IsRequired().HasMaxLength(10);
                 tb.Property(col => col.FechaIngreso).IsRequired().HasColumnType("date");
                 tb.Property(col => col.Direccion).IsRequired().HasMaxLength(255);
                 tb.Property(col => col.Telefono).IsRequired().HasMaxLength(15);
                 tb.Property(col => col.Email).IsRequired().HasMaxLength(100);
-                tb.Property(col => col.Contrasena).IsRequired();
+                tb.Property(col => col.Contrasena).IsRequired().HasMaxLength(255);
                 tb.Property(col => col.Restablecer).IsRequired().HasDefaultValue(false);
                 tb.Property(col => col.FechaCreacion).IsRequired().HasColumnType("datetime");
                 tb.Property(col => col.FechaModificacion).IsRequired().HasColumnType("datetime");
@@ -134,7 +129,6 @@ namespace InovaAcceso.Data
                     .WithMany()
                     .HasForeignKey(col => col.IdCargo)
                     .OnDelete(DeleteBehavior.Cascade);
-
                 tb.HasOne(col => col.TipoDocumento)
                     .WithMany()
                     .HasForeignKey(col => col.IdTipoDoc)
@@ -148,13 +142,9 @@ namespace InovaAcceso.Data
                     .HasForeignKey(col => col.IdRol)
                     .OnDelete(DeleteBehavior.Cascade);
             });
-
-
             modelBuilder.Entity<Persona>().ToTable("Persona");
 
-
-            //Tabla RegistroAsistencia
-
+            // Configuración de la tabla RegistroAsistencia
             modelBuilder.Entity<RegistroAsistencia>(tb =>
             {
                 tb.HasKey(col => col.IdRegistro);
@@ -163,14 +153,13 @@ namespace InovaAcceso.Data
                     .ValueGeneratedOnAdd();
 
                 tb.HasOne(col => col.Persona)
-                .WithMany()
-                .HasForeignKey(col => col.IdPersona)
-                .OnDelete(DeleteBehavior.Cascade);
-
+                    .WithMany()
+                    .HasForeignKey(col => col.IdPersona)
+                    .OnDelete(DeleteBehavior.Cascade);
                 tb.HasOne(col => col.Turno)
-                .WithMany()
-                .HasForeignKey(col => col.IdTurno)
-                .OnDelete(DeleteBehavior.Cascade);
+                    .WithMany()
+                    .HasForeignKey(col => col.IdTurno)
+                    .OnDelete(DeleteBehavior.Cascade);
 
                 tb.Property(col => col.FechaIngreso).HasColumnType("date").IsRequired();
                 tb.Property(col => col.HoraIngreso).HasColumnType("time(7)").IsRequired();
@@ -179,19 +168,15 @@ namespace InovaAcceso.Data
                 tb.Property(col => col.Tardanza).IsRequired();
                 tb.Property(col => col.FechaCreacion).HasColumnType("datetime");
                 tb.Property(col => col.FechaModificacion).HasColumnType("datetime");
-                tb.Property(col => col.ResponsableModificacion).IsRequired().HasMaxLength(100); ;
-
-
+                tb.Property(col => col.ResponsableModificacion).IsRequired().HasMaxLength(100);
             });
-
             modelBuilder.Entity<RegistroAsistencia>().ToTable("RegistroAsistencia");
 
-
-            //Aca la tabla Gestion Turno
+            // Configuración de la tabla GestionTurno
             modelBuilder.Entity<GestionTurno>(tb =>
-			{
-				tb.HasKey(col => col.IdGestionTurno);
-				tb.Property(col => col.IdGestionTurno)
+            {
+                tb.HasKey(col => col.IdGestionTurno);
+                tb.Property(col => col.IdGestionTurno)
                     .UseIdentityColumn()
                     .ValueGeneratedOnAdd();
 
@@ -199,7 +184,6 @@ namespace InovaAcceso.Data
                     .WithMany()
                     .HasForeignKey(col => col.IdPersona)
                     .OnDelete(DeleteBehavior.Cascade);
-
                 tb.HasOne(col => col.Turno)
                     .WithMany()
                     .HasForeignKey(col => col.IdTurno)
@@ -207,14 +191,11 @@ namespace InovaAcceso.Data
 
                 tb.Property(col => col.FechaInicio).HasColumnType("date").IsRequired();
                 tb.Property(col => col.FechaFin).HasColumnType("date").IsRequired();
-				tb.Property(col => col.FechaCreacion).HasColumnType("datetime").IsRequired();
-				tb.Property(col => col.FechaModificacion).HasColumnType("datetime").IsRequired();
-				tb.Property(col => col.ResponsableModificacion).HasMaxLength(50).IsRequired();
-			});
-			modelBuilder.Entity<GestionTurno>().ToTable("GestionTurno");
-
-
-
-		}
-	}
+                tb.Property(col => col.FechaCreacion).HasColumnType("datetime").IsRequired();
+                tb.Property(col => col.FechaModificacion).HasColumnType("datetime").IsRequired();
+                tb.Property(col => col.ResponsableModificacion).HasMaxLength(50).IsRequired();
+            });
+            modelBuilder.Entity<GestionTurno>().ToTable("GestionTurno");
+        }
+    }
 }

@@ -36,6 +36,10 @@
         <div id="layoutSidenav_nav">
             <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                 <div class="sb-sidenav-menu" style="background-color: #132A58;">
+
+                    @if (User.IsInRole("Admin")) // Verifica si el usuario es Admin
+                    {
+                    <!-- Si el rol es 1 mostrar todo el nav si es 2 no -->
                     <div class="nav">
                         <!-- Grupo1<div class="sb-sidenav-menu-heading">Home</div>-->
                         <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
@@ -97,12 +101,22 @@
                             <div class="sb-nav-link-icon"><i class="fas fa-chart-area" style="color: #B197FC;"></i></div>
                             Gráficos
                         </a>
-
-
                     </div>
+                    }
+
+                    @if (User.IsInRole("User")) // Verifica si el usuario es User
+                    {
+                        <div class="nav">
+                            <!-- Grupo1<div class="sb-sidenav-menu-heading">Home</div>-->
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+                                <div class="sb-nav-link-icon" style="color: #ffffff;"><i class="fa fa-home"></i></div>
+                                Home
+                            </a>
+                        </div>
+                    }
                 </div>
                 <div class="sb-sidenav-footer" style="background-color: #132A58;">
-                    <div class="small"> Inicio sesión como:</div>
+                    <div class="small"> Inicio sesión como: @User.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).SingleOrDefault()</div>
                     @User.Claims.Where(c => c.Type == ClaimTypes.Name).Select(c => c.Value).SingleOrDefault()
                 </div>
             </nav>

@@ -2,6 +2,7 @@
 using System.Security.Principal;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Identity;
 
 namespace InovaAcceso.Models
 {
@@ -23,7 +24,8 @@ namespace InovaAcceso.Models
         public required string Direccion { get; set; }
         public string Telefono { get; set; }
         public required string Email { get; set; }
-        public required byte[] Contrasena { get; set; }
+
+        public required string Contrasena { get; set; }
         public bool Restablecer{ get; set; }
         public int IdCargo { get; set; }
         // Propiedades de navegación

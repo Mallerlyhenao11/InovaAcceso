@@ -7,10 +7,11 @@ using Microsoft.AspNetCore.Authorization;
 using InovaAcceso.Service;
 using System.Threading.Tasks;
 using System.Security.Claims;
+using DocumentFormat.OpenXml.Office2010.Excel;
 
 namespace InovaAcceso.Controllers
 {
-    [Authorize]
+    [Authorize (Roles = "Admin")]
     public class PersonaController : Controller
     {
         private readonly AppDBContext _appDbContext;
@@ -18,6 +19,11 @@ namespace InovaAcceso.Controllers
         public PersonaController(AppDBContext appDbContext)
         {
             _appDbContext = appDbContext;
+            if (true)
+            {
+
+
+            }
         }
 
         [HttpGet]
@@ -62,24 +68,56 @@ namespace InovaAcceso.Controllers
 
             try
             {
-                string passwordInput = $"{persona.PrimerApellido}{persona.NumeroDocumento}";
-                string hashedPassword = BCrypt.Net.BCrypt.HashPassword(passwordInput);
-                persona.Contrasena = System.Text.Encoding.UTF8.GetBytes(hashedPassword);
-                persona.Restablecer = true;
-                persona.FechaCreacion = DateTime.Now;
-                persona.FechaModificacion = DateTime.Now;
+                Persona personaBusqueda = await _appDbContext.Personas
+                    .Include(p => p.Cargo)
+                    .Include(p => p.Estado)
+                    .Include(p => p.TipoDocumento)
+                                .Include(p => p.Rol)
+                    .FirstOrDefaultAsync(p => p.NumeroDocumento == persona.NumeroDocumento);
 
-                await _appDbContext.Personas.AddAsync(persona);
-                await _appDbContext.SaveChangesAsync();
-                
-                
-                var emailSender = HttpContext.RequestServices.GetRequiredService<IEmailSender>();
-                string subject = "Tus credenciales de acceso";
-                string body = $"Hola {persona.PrimerNombre},<br/><br/>Tu cuenta ha sido creada con éxito.<br/>Número de Documento: {persona.NumeroDocumento}<br/>Contraseña: {passwordInput}<br/><br/>Saludos,<br/>Tu equipo";
-                await emailSender.SendEmailAsync(persona.Email, subject, body);
-                
-                TempData["SuccessMessage"] = "Persona agregada exitosamente.";
-                return RedirectToAction(nameof(ListaPersonas));
+                if (personaBusqueda != null)
+                {
+                    CargarListasDeSeleccion();
+                    TempData["ErrorMessage"] = "La persona ya se encuentra registrada.";
+                    return View(persona);
+                }
+                else
+                {
+                    string passwordInput = $"{persona.PrimerApellido}{persona.NumeroDocumento}";
+                    string hashedPassword = BCrypt.Net.BCrypt.HashPassword(passwordInput);
+                    persona.Contrasena = hashedPassword;
+
+                    persona.Restablecer = true;
+                    persona.FechaCreacion = DateTime.Now;
+                    persona.FechaModificacion = DateTime.Now;
+
+                    await _appDbContext.Personas.AddAsync(persona);
+                    await _appDbContext.SaveChangesAsync();
+
+                    EmailSettings email = new EmailSettings()
+                    {
+                        To = persona.Email,
+                        Subject = "Tus credenciales de acceso",
+                        Body = $"Hola {persona.PrimerNombre},<br/><br/>Tu cuenta ha sido creada con éxito.<br/>Número de Documento: {persona.NumeroDocumento}<br/>Contraseña: {passwordInput}<br/><br/>Saludos,<br/>Tu equipo"
+                    };
+
+                    bool enviado = CorreoServicio.Enviar(email);
+
+                    if (enviado)
+                    {
+                        CargarListasDeSeleccion();
+                        TempData["SuccessMessage"] = "Persona agregada exitosamente.";
+                        return RedirectToAction(nameof(ListaPersonas));
+                    }
+                    else
+                    {
+                        CargarListasDeSeleccion();
+                        TempData["ErrorMessage"] = "NO se envio correo";
+                        return View(persona);
+
+                    }
+                }
+
             }
             catch (Exception ex)
             {
@@ -96,7 +134,7 @@ namespace InovaAcceso.Controllers
                 .Include(p => p.Estado)
                 .Include(p => p.TipoDocumento)
                 .Include(p => p.Rol)
-                .FirstOrDefaultAsync(p => p.IdPersona == id);
+                .FirstOrDefaultAsync(p => p.IdPersona ==  id);
 
             if (persona == null)
             {

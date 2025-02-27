@@ -6,11 +6,13 @@ using DinkToPdf.Contracts;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.EntityFrameworkCore;
 using ClosedXML.Excel;
+using Microsoft.AspNetCore.Authorization;
 
 
 
 namespace InovaAcceso.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class ReporteController : Controller
     {
         private readonly IConverter _converter;

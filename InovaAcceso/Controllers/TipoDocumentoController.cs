@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace InovaAcceso.Controllers
 {
-    //[Authorize]
+    [Authorize(Roles = "Admin")]
     public class TipoDocumentoController : Controller
     {
 		private readonly AppDBContext _appDbContext;
