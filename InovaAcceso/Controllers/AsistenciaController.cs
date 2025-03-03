@@ -3,11 +3,11 @@ using InovaAcceso.Data;
 using InovaAcceso.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Authorization;
+using InovaAcceso.Filters;
 
 namespace InovaAcceso.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [AuthorizeSession("Admin")]
     public class AsistenciaController : Controller
     {
         private readonly AppDBContext _context;

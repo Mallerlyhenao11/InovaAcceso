@@ -1,0 +1,102 @@
+﻿@{
+    Layout = null;
+    ViewData["Title"] = "Reloj";
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #18346d; /* Fondo color1 */
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            position: relative;
+        }
+
+        .clock-container {
+            font-size: 6rem;
+            font-weight: bold;
+            color: #2bc9c8; /* color4 */
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px 50px;
+            border-radius: 20px;
+            box-shadow: 0px 0px 20px rgba(43, 201, 200, 0.6);
+            border: 3px solid #2b8fc8; /* color3 */
+        }
+
+        .icon-container {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        .icon {
+            width: 50px; /* Tamaño más pequeño */
+            height: 50px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.3s;
+            box-shadow: 0px 0px 15px rgba(43, 201, 200, 0.6);
+            border-radius: 50%;
+        }
+
+            .icon:hover {
+                transform: scale(1.1);
+                box-shadow: 0px 0px 25px rgba(43, 201, 200, 0.8);
+            }
+
+        .fingerprint-container {
+            margin-top: 20px;
+        }
+
+        .fingerprint-icon {
+            width: 70px;
+            height: 70px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.3s;
+            box-shadow: 0px 0px 15px rgba(43, 201, 200, 0.6);
+            border-radius: 50%;
+        }
+
+            .fingerprint-icon:hover {
+                transform: scale(1.1);
+                box-shadow: 0px 0px 25px rgba(43, 201, 200, 0.8);
+            }
+    </style>
+</head>
+<body>
+    <div class="icon-container">
+        <a href="@Url.Action("Login", "Home")">
+            <img src="/img/acceso.png" alt="Entrar" class="icon">
+        </a>
+    </div>
+
+    <div class="clock-container" id="clock"></div>
+
+    <div class="fingerprint-container">
+        <img src="/img/huella-dactilar.png" alt="Registrar Huella" class="fingerprint-icon">
+    </div>
+
+    <script>
+        function updateClock() {
+            const now = new Date();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            document.getElementById('clock').innerText = `${hours}:${minutes}`;
+        }
+
+        setInterval(updateClock, 1000);
+        updateClock();
+    </script>
+</body>
+</html>

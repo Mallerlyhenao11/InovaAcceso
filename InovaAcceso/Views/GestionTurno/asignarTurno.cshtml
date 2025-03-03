@@ -16,12 +16,16 @@
 
                 <div class="form-group">
                     <label for="IdPersona">Persona</label>
-                    <select class="form-control" asp-for="IdPersona" asp-items="ViewBag.Personas"></select>
+                    <select class="form-control" asp-for="IdPersona" asp-items="ViewBag.Personas">
+                        <option value="">Seleccione una persona</option>
+                    </select>
                 </div>
 
                 <div class="form-group">
                     <label for="IdTurno">Turno</label>
-                    <select class="form-control" asp-for="IdTurno" asp-items="ViewBag.Turnos"></select>
+                    <select class="form-control" asp-for="IdTurno" asp-items="ViewBag.Turnos">
+                        <option value="">Seleccione una opción</option>
+                    </select>
                 </div>
 
                 <div class="form-group">
@@ -44,7 +48,7 @@
         <!-- Botones de Acción -->
         <div class="d-flex justify-content-center mb-2">
             <button type="submit" class="btn btn-primary me-2">Guardar</button>
-            <a asp-controller="GestionTurno" asp-action="listaAsignacionDeTurno" class="btn btn-secondary">Cancelar</a>
+            <a asp-controller="GestionTurno" asp-action="listaAsignacionTurno" class="btn btn-secondary">Cancelar</a>
         </div>
     </form>
 </div>

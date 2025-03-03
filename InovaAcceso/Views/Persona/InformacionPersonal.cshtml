@@ -1,0 +1,105 @@
+﻿@model InovaAcceso.Models.Persona
+@using InovaAcceso.Service
+@inject UsuarioService _usuarioService
+
+<div class="container-fluid px-4 mt-2">
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Mi Información</li>
+    </ol>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <h2 class="text-center mb-2">Información Personal</h2>
+
+    <form asp-controller="Persona" asp-action="ActualizarInfo" method="post">
+        <input type="hidden" asp-for="IdPersona" />
+
+        <!-- Información Personal -->
+        <fieldset class="border p-2 mb-2">
+            <h4 class="w-auto px-2">Datos Personales</h4>
+            <div class="row">
+                <div class="col-md-6 mb-2">
+                    <label class="form-label">Tipo de Documento</label>
+                    <input type="text" class="form-control" value="@Model.TipoDocumento.Documento" readonly />
+                </div>
+                <div class="col-md-6 mb-2">
+                    <label class="form-label">Número de Documento</label>
+                    <input type="text" class="form-control" value="@Model.NumeroDocumento" readonly />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-2">
+                    <label class="form-label">Nombre Completo</label>
+                    <input type="text" class="form-control" value="@Model.NombreCompleto" readonly />
+                </div>
+                <div class="col-md-6 mb-2">
+                    <label class="form-label">Fecha de Nacimiento</label>
+                    <input type="date" class="form-control" value="@Model.FechaNacimiento.ToString("yyyy-MM-dd")" readonly />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-2">
+                    <label class="form-label">Sexo</label>
+                    <input type="text" class="form-control" value="@Model.Sexo" readonly />
+                </div>
+                <div class="col-md-6 mb-2">
+                    <label class="form-label">Edad</label>
+                    <input type="text" class="form-control" value="@Model.Edad" readonly />
+                </div>
+            </div>
+        </fieldset>
+
+        <!-- Información de Contacto -->
+        <fieldset class="border p-2 mb-2">
+            <h4 class="w-auto px-2">Datos de Contacto</h4>
+            <div class="row">
+                <div class="col-md-6 mb-2">
+                    <label class="form-label">Correo Electrónico</label>
+                    <input type="email" class="form-control" asp-for="Email" required />
+                </div>
+                <div class="col-md-6 mb-2">
+                    <label class="form-label">Teléfono</label>
+                    <input type="tel" class="form-control" asp-for="Telefono" required />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 mb-2">
+                    <label class="form-label">Dirección</label>
+                    <input type="text" class="form-control" asp-for="Direccion" required />
+                </div>
+            </div>
+        </fieldset>
+
+        <!-- Botones de Acción -->
+        <div class="d-flex justify-content-center mb-2">
+            <button type="submit" class="btn btn-primary me-2">Guardar Cambios</button>
+            <a asp-controller="Persona" asp-action="ListaPersonas" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+
+<script>
+    // Ocultar alertas después de 10 segundos
+    setTimeout(function () {
+        let alertElement = document.querySelector('.alert-dismissible');
+        if (alertElement) {
+            let alert = new bootstrap.Alert(alertElement);
+            alert.close();
+        }
+    }, 10000);
+</script>

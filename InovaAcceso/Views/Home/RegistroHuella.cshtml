@@ -1,0 +1,43 @@
+﻿@{
+    ViewData["Title"] = "Registro de Huella";
+}
+
+<div class="container text-center mt-5">
+    <h2 class="mb-4">Registro de Huella Dactilar</h2>
+
+    <!-- Reloj en tiempo real -->
+    <div class="mb-3">
+        <h3 id="reloj" class="display-4 fw-bold"></h3>
+    </div>
+
+    <!-- Mensaje de error si la huella no es reconocida -->
+    @if (ViewData["Mensaje"] != null)
+    {
+        <div class="alert alert-danger">
+            @ViewData["Mensaje"]
+        </div>
+    }
+
+    <!-- Formulario de Huella -->
+    <form method="post" action="@Url.Action("RegistroHuella", "Home")">
+        <div class="mb-3">
+            <label for="huellaCapturada" class="form-label">Coloca tu huella en el lector:</label>
+            <input type="text" id="huellaCapturada" name="huellaCapturada" class="form-control text-center" placeholder="Esperando huella..." required>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Verificar Huella</button>
+    </form>
+</div>
+
+<!-- Script para el reloj en tiempo real -->
+<script>
+    function actualizarReloj() {
+        const ahora = new Date();
+        const horas = ahora.getHours().toString().padStart(2, '0');
+        const minutos = ahora.getMinutes().toString().padStart(2, '0');
+        const segundos = ahora.getSeconds().toString().padStart(2, '0');
+        document.getElementById('reloj').innerText = `${horas}:${minutos}:${segundos}`;
+    }
+    setInterval(actualizarReloj, 1000);
+    actualizarReloj();
+</script>

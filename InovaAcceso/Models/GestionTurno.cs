@@ -10,10 +10,10 @@ namespace InovaAcceso.Models
         public int IdGestionTurno { get; set; }
 		public int IdPersona { get; set; }
         // Propiedades de navegación
-        public virtual required Persona Persona { get; set; }
+        public virtual  Persona Persona { get; set; }
         public int IdTurno { get; set; }
         // Propiedades de navegación
-        public virtual required Turno Turno { get; set; }
+        public virtual  Turno Turno { get; set; }
         public DateTime FechaInicio { get; set; }
 		public DateTime FechaFin { get; set; }
 		public DateTime FechaCreacion { get; set; }

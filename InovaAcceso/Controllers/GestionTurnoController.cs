@@ -1,67 +1,86 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using InovaAcceso.Data;
 using InovaAcceso.Models;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Security.Claims;
+using InovaAcceso.Filters;
+using InovaAcceso.Service;
 
 namespace InovaAcceso.Controllers
 {
-    [Authorize(Roles = "Admin")]
     public class GestionTurnoController : Controller
-	{
-		private readonly AppDBContext _appDbContext;
+    {
+        private readonly AppDBContext _appDbContext;
+        private readonly UsuarioService _usuarioService;
 
-		public GestionTurnoController(AppDBContext appDbContext)
-		{
-			_appDbContext = appDbContext;
-		}
-
-		[HttpGet]
-		public async Task<IActionResult> listaAsignacionTurno(string searchString, int? pageNumber)
-		{
-			var gestionTurnos = _appDbContext.GestionTurnos
-								.Include(g => g.Persona)
-								.Include(g => g.Turno)
-								.AsQueryable();
-
-			// Aplicar filtro de búsqueda si se proporciona un término de búsqueda
-			if (!string.IsNullOrEmpty(searchString))
-			{
-				gestionTurnos = gestionTurnos.Where(g => g.Persona.PrimerNombre.ToString().Contains(searchString) ||
-														 g.Persona.PrimerApellido.ToString().Contains(searchString) ||
-														 g.Turno.NombreTurno.ToString().Contains(searchString));
-			}
-
-			int pageSize = 10;
-			var paginatedList = await PaginatedList<GestionTurno>.CreateAsync(gestionTurnos.AsNoTracking(), pageNumber ?? 1, pageSize);
-			return View(paginatedList);
-		}
-
-		[HttpGet]
-		public IActionResult asignarTurno()
-		{
-			cargarListasDeSeleccion();
-
-			return View();
-		}
-
-		[HttpPost]
-		public async Task<IActionResult> asignarTurno(GestionTurno gestionTurno)
-		{
-            
-                await _appDbContext.GestionTurnos.AddAsync(gestionTurno);
-                await _appDbContext.SaveChangesAsync();
-                TempData["SuccessMessage"] = "Turno asigando exitosamente.";
-                return RedirectToAction(nameof(listaAsignacionTurno));
-            
+        public GestionTurnoController(AppDBContext appDbContext, UsuarioService usuarioService)
+        {
+            _usuarioService = usuarioService;
+            _appDbContext = appDbContext;
         }
 
-            [HttpGet]
+        [AuthorizeSession("Admin")]
+        [HttpGet]
+        public async Task<IActionResult> listaAsignacionTurno(string searchString, int? pageNumber)
+        {
+            var gestionTurnos = _appDbContext.GestionTurnos
+                .Include(g => g.Persona)
+                .Include(g => g.Turno)
+                .AsQueryable();
+
+            // Filtro de búsqueda
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                gestionTurnos = gestionTurnos.Where(g =>
+                    g.Persona.PrimerNombre.Contains(searchString) ||
+                    g.Persona.PrimerApellido.Contains(searchString) ||
+                    g.Turno.NombreTurno.Contains(searchString));
+            }
+
+            int pageSize = 10;
+            var paginatedList = await PaginatedList<GestionTurno>.CreateAsync(gestionTurnos.AsNoTracking(), pageNumber ?? 1, pageSize);
+            return View(paginatedList);
+        }
+
+        [HttpGet]
+        public IActionResult asignarTurno()
+        {
+            cargarListasDeSeleccion();
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> asignarTurno(GestionTurno gestionTurno)
+        {
+            gestionTurno.FechaCreacion = DateTime.Now;
+            gestionTurno.FechaModificacion = DateTime.Now;
+            gestionTurno.ResponsableModificacion = _usuarioService.UsuarioNombres; 
+
+            try
+            {
+                await _appDbContext.GestionTurnos.AddAsync(gestionTurno);
+                await _appDbContext.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Turno asignado exitosamente.";
+                return RedirectToAction(nameof(listaAsignacionTurno));
+            }
+            catch (DbUpdateException ex)
+            {
+                ModelState.AddModelError("", "Ocurrió un error al guardar el turno: " + ex.Message);
+                cargarListasDeSeleccion();
+                return View(gestionTurno);
+            }
+        }
+
+        [HttpGet]
         public async Task<IActionResult> editarAsignacionTurno(int id)
         {
-			cargarListasDeSeleccion();
-            GestionTurno gestionTurno = await _appDbContext.GestionTurnos.FirstAsync(g => g.IdGestionTurno == id);
+            cargarListasDeSeleccion();
+            var gestionTurno = await _appDbContext.GestionTurnos.FindAsync(id);
+            if (gestionTurno == null)
+            {
+                return NotFound();
+            }
             return View(gestionTurno);
         }
 
@@ -74,43 +93,59 @@ namespace InovaAcceso.Controllers
                 return View(gestionTurno);
             }
 
-            var gestionTurnoExistente = await _appDbContext.GestionTurnos.FirstOrDefaultAsync(g => g.IdGestionTurno == gestionTurno.IdGestionTurno);
-            if (gestionTurnoExistente != null)
+            try
             {
-                gestionTurnoExistente.IdPersona = gestionTurno.IdPersona;
-                gestionTurnoExistente.IdTurno = gestionTurno.IdTurno;
-                gestionTurnoExistente.FechaInicio = gestionTurno.FechaInicio;
-                gestionTurnoExistente.FechaFin = gestionTurno.FechaFin;
+                var gestionTurnoExistente = await _appDbContext.GestionTurnos.FirstOrDefaultAsync(g => g.IdGestionTurno == gestionTurno.IdGestionTurno);
 
-                _appDbContext.GestionTurnos.Update(gestionTurnoExistente);
-                await _appDbContext.SaveChangesAsync();
-                TempData["SuccessMessage"] = "Turno actualizado exitosamente.";
-                return RedirectToAction(nameof(listaAsignacionTurno));
+                if (gestionTurnoExistente != null)
+                {
+                    gestionTurnoExistente.IdPersona = gestionTurno.IdPersona;
+                    gestionTurnoExistente.IdTurno = gestionTurno.IdTurno;
+                    gestionTurnoExistente.FechaInicio = gestionTurno.FechaInicio;
+                    gestionTurnoExistente.FechaFin = gestionTurno.FechaFin;
+                    gestionTurnoExistente.FechaModificacion = DateTime.Now;
+                    gestionTurnoExistente.ResponsableModificacion = _usuarioService.UsuarioNombres; 
+
+                    _appDbContext.GestionTurnos.Update(gestionTurnoExistente);
+                    await _appDbContext.SaveChangesAsync();
+                    TempData["SuccessMessage"] = "Turno actualizado exitosamente.";
+                    return RedirectToAction(nameof(listaAsignacionTurno));
+                }
+
+                cargarListasDeSeleccion();
+                return View(gestionTurno);
             }
-
-            cargarListasDeSeleccion();
-            return View(gestionTurno);
+            catch (DbUpdateException ex)
+            {
+                ModelState.AddModelError("", "Ocurrió un error al actualizar el turno: " + ex.Message);
+                cargarListasDeSeleccion();
+                return View(gestionTurno);
+            }
         }
 
         [HttpGet]
         public async Task<IActionResult> EliminarTurnoConfirmado(int id)
         {
-            var gestionTurno = await _appDbContext.GestionTurnos.FindAsync(id);
-
-            if (gestionTurno == null)
+            try
             {
-                return NotFound();
+                var gestionTurno = await _appDbContext.GestionTurnos.FindAsync(id);
+
+                if (gestionTurno == null)
+                {
+                    return NotFound();
+                }
+
+                _appDbContext.GestionTurnos.Remove(gestionTurno);
+                await _appDbContext.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Turno eliminado exitosamente.";
+                return RedirectToAction(nameof(listaAsignacionTurno));
             }
-
-            _appDbContext.GestionTurnos.Remove(gestionTurno);
-            await _appDbContext.SaveChangesAsync();
-            TempData["SuccessMessage"] = "Turno eliminado exitosamente.";
-
-            return RedirectToAction(nameof(listaAsignacionTurno));
+            catch (DbUpdateException ex)
+            {
+                TempData["ErrorMessage"] = "Ocurrió un error al eliminar el turno: " + ex.Message;
+                return RedirectToAction(nameof(listaAsignacionTurno));
+            }
         }
-
-
-
 
         private void cargarListasDeSeleccion()
         {
@@ -118,5 +153,19 @@ namespace InovaAcceso.Controllers
             ViewBag.Personas = new SelectList(_appDbContext.Personas, "IdPersona", "NombreCompleto");
         }
 
+        [HttpGet]
+        public async Task<IActionResult> ListarTurnoPersona(int? pageNumber)
+        {
+            var nameIdentifier = _usuarioService.UsuarioId;
+
+            var gestionTurnos = _appDbContext.GestionTurnos
+                .Include(g => g.Persona)
+                .Include(g => g.Turno)
+                .Where(g => g.IdPersona == nameIdentifier);
+
+            int pageSize = 10;
+            var listaTurnos = await PaginatedList<GestionTurno>.CreateAsync(gestionTurnos.AsNoTracking(), pageNumber ?? 1, pageSize);
+            return View(listaTurnos);
+        }
     }
 }

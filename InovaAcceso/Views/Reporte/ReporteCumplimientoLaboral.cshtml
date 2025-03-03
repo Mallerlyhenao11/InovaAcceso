@@ -3,44 +3,77 @@
 @{
     ViewData["Title"] = "Reporte de Cumplimiento Laboral";
 }
-
 <div class="container-fluid px-4 mt-4">
     <nav>
         <ol class="breadcrumb mb-4">
-            <li class="breadcrumb-item"><a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+            <li class="breadcrumb-item"><a class="nav-link text-dark" asp-area="" asp-controller="Reporte" asp-action="Reportes">Reportes</a></li>
             <li class="breadcrumb-item active" aria-current="page">Reporte de Cumplimiento Laboral</li>
         </ol>
     </nav>
-
-        <h4 class="w-auto px-2">Reporte de Cumplimiento Laboral</h4>
-        <table class="table table-bordered table-hover mt-3">
-            <thead class="table-dark">
-                <tr>
-                    <th>Empleado</th>
-                    <th>Fecha</th>
-                    <th>Ingreso</th>
-                    <th>Salida</th>
-                    <th>Tardanza</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var registro in Model)
-                {
-                    <tr>
-                        <td>@registro.Persona.NombreCompleto</td>                        
-                        <td>@registro.FechaIngreso.ToString("dd/MM/yyyy")</td>
-                        <td>@registro.HoraIngreso</td>
-                        <td>@registro.HoraSalida</td>
-                        <td class="@(registro.LlegadaTarde ? "text-danger" : "text-success")">
-                            @(registro.LlegadaTarde ? $"{registro.Tardanza} min tarde" : "A tiempo")
-                        </td>
-                      </tr>
-                }
-            </tbody>
-        </table>
-    <div class="mb-3">
-        <a asp-controller="Reporte" asp-action="ExportarExcel" class="btn btn-success">
-            Exportar a Excel
-        </a>
+    <div class="row">
+        <div class="col-12">
+            <form method="get" class="mb-3">
+                <div class="input-group">
+                    <input type="text" name="numeroDoc" class="form-control form-control-sm" placeholder="Buscar por  documento" value="@ViewData["CurrentFilter"]" />
+                    <label class="px-2" for=""></label>
+                    <input name="fecha" class="form-control" placeholder="Buscar porfechas" type="date" />
+                    <button class="btn btn-success" type="submit">Buscar</button>
+                </div>
+            </form>
         </div>
+        <div class="col-12">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover mt-3">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Empleado</th>
+                            <th>Fecha</th>
+                            <th>Ingreso</th>
+                            <th>Salida</th>
+                            <th>Tardanza</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @for (int i = 0; i < Model.Count(); i++)
+                        {
+                            <tr>
+                                <td>@Model[i].Persona.NombreCompleto</td>
+                                <td>@Model[i].FechaIngreso.ToString("dd/MM/yyyy")</td>
+                                <td>@Model[i].HoraIngreso</td>
+                                <td>@Model[i].HoraSalida</td>
+                                <td class="@(@Model[i].LlegadaTarde ? "text-danger" : "text-success")">
+                                    @(@Model[i].LlegadaTarde ? $"{@Model[i].Tardanza} min tarde" : "A tiempo")
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="input-group my-lg-1">
+                <form asp-controller="Reporte" asp-action="ExportarExcel" method="post">
+                    @foreach (var registro in Model)
+                    {
+                        <input type="hidden" name="registros[@Model.IndexOf(registro)].Persona.NombreCompleto" value="@registro.Persona.NombreCompleto" />
+                        <input type="hidden" name="registros[@Model.IndexOf(registro)].Turno.NombreTurno" value="@registro.Turno.NombreTurno" />
+                        <input type="hidden" name="registros[@Model.IndexOf(registro)].FechaIngreso" value="@registro.FechaIngreso" />
+                        <input type="hidden" name="registros[@Model.IndexOf(registro)].HoraIngreso" value="@registro.HoraIngreso" />
+                        <input type="hidden" name="registros[@Model.IndexOf(registro)].HoraSalida" value="@registro.HoraSalida" />
+                        <input type="hidden" name="registros[@Model.IndexOf(registro)].LlegadaTarde" value="@registro.LlegadaTarde" />
+                        <input type="hidden" name="registros[@Model.IndexOf(registro)].ResponsableModificacion" value="@registro.ResponsableModificacion" />
+                    }
+
+                    <button type="submit" class="btn btn-success">Exportar a Excel</button>
+                </form>
+                <a asp-controller="Reporte" asp-action="ReporteCumplimientoLaboral" class="btn btn-primary">
+                    Limpiar
+                </a>
+
+
+            </div>
+        </div>
+    </div>
 </div>
+

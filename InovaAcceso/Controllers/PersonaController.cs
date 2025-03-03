@@ -3,29 +3,28 @@ using InovaAcceso.Data;
 using InovaAcceso.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Authorization;
 using InovaAcceso.Service;
-using System.Threading.Tasks;
 using System.Security.Claims;
-using DocumentFormat.OpenXml.Office2010.Excel;
+using InovaAcceso.Filters;
+
 
 namespace InovaAcceso.Controllers
 {
-    [Authorize (Roles = "Admin")]
+
     public class PersonaController : Controller
     {
         private readonly AppDBContext _appDbContext;
-
-        public PersonaController(AppDBContext appDbContext)
+        private readonly UsuarioService _usuarioService;
+        public PersonaController(AppDBContext appDbContext, UsuarioService usuarioService)
         {
+            _usuarioService = usuarioService;
             _appDbContext = appDbContext;
             if (true)
             {
-
-
             }
         }
 
+        [AuthorizeSession("Admin")]
         [HttpGet]
         public async Task<IActionResult> ListaPersonas(string searchString, int? pageNumber)
         {
@@ -48,14 +47,14 @@ namespace InovaAcceso.Controllers
             int pageSize = 10;
             return View(await PaginatedList<Persona>.CreateAsync(personas.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
-
+        [AuthorizeSession("Admin")]
         [HttpGet]
         public IActionResult AgregarPersona()
         {
             CargarListasDeSeleccion();
             return View();
         }
-
+        [AuthorizeSession("Admin")]
         [HttpPost]
         public async Task<IActionResult> AgregarPersona(Persona persona)
         {
@@ -121,12 +120,12 @@ namespace InovaAcceso.Controllers
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = "No se pudo guardar la persona. Inténtalo de nuevo. "+ ex.InnerException?.Message + ex.Message;
+                TempData["ErrorMessage"] = "No se pudo guardar la persona. Inténtalo de nuevo. " + ex.InnerException?.Message + ex.Message;
                 CargarListasDeSeleccion();
                 return View(persona);
             }
         }
-
+        [AuthorizeSession("Admin")]
         public async Task<IActionResult> EditarPersona(int id)
         {
             Persona persona = await _appDbContext.Personas
@@ -134,18 +133,18 @@ namespace InovaAcceso.Controllers
                 .Include(p => p.Estado)
                 .Include(p => p.TipoDocumento)
                 .Include(p => p.Rol)
-                .FirstOrDefaultAsync(p => p.IdPersona ==  id);
+                .FirstOrDefaultAsync(p => p.IdPersona == id);
 
             if (persona == null)
             {
                 TempData["ErrorMessage"] = "La persona no fue encontrada.";
-               return RedirectToAction(nameof(ListaPersonas));
+                return RedirectToAction(nameof(ListaPersonas));
             }
 
             CargarListasDeSeleccion();
             return View(persona);
         }
-
+        [AuthorizeSession("Admin")]
         [HttpPost]
         public async Task<IActionResult> EditarPersona(Persona persona)
         {
@@ -191,7 +190,7 @@ namespace InovaAcceso.Controllers
                 personaExistente.IdTipoDoc = persona.IdTipoDoc;
                 personaExistente.IdRol = persona.IdRol;
                 personaExistente.FechaModificacion = DateTime.Now;
-                personaExistente.ResponsableModificacion = User.Identity.Name; // Asignar el usuario actual
+                personaExistente.ResponsableModificacion = _usuarioService.UsuarioNombres; // Asignar el usuario actual
 
                 _appDbContext.Personas.Update(personaExistente);
                 await _appDbContext.SaveChangesAsync();
@@ -206,7 +205,7 @@ namespace InovaAcceso.Controllers
                 return View(persona);
             }
         }
-
+        [AuthorizeSession("Admin")]
         [HttpGet]
         public async Task<IActionResult> EliminarPersona(int id)
         {
@@ -225,8 +224,8 @@ namespace InovaAcceso.Controllers
 
             return View(persona);
         }
-
         [HttpPost, ActionName("EliminarPersona")]
+        [AuthorizeSession("Admin")]
         public async Task<IActionResult> ConfirmarEliminarPersona(int id)
         {
             try
@@ -251,7 +250,87 @@ namespace InovaAcceso.Controllers
 
             return RedirectToAction(nameof(ListaPersonas));
         }
+        [AuthorizeSession("User")]
+        public async Task<IActionResult> InformacionPersonal()
+        {
+            // Obtener el email del usuario autenticado
+            string usuarioEmail = _usuarioService.UsuarioEmail;
 
+            if (string.IsNullOrEmpty(usuarioEmail))
+            {
+                TempData["ErrorMessage"] = "No se pudo obtener el correo electrónico del usuario.";
+                return RedirectToAction("Index", "Home"); // Redirigir si no se encuentra el email
+            }
+
+            // Buscar la persona en la base de datos
+            var persona = await _appDbContext.Personas
+                .Include(p => p.TipoDocumento)
+                .Include(p => p.Cargo)
+                .Include(p => p.Estado)
+                .Include(p => p.Rol)
+                .FirstOrDefaultAsync(p => p.Email == usuarioEmail);
+
+            if (persona == null)
+            {
+                TempData["ErrorMessage"] = "No se encontró información asociada al usuario.";
+                return RedirectToAction("Index", "Home"); // Redirigir si no se encuentra la persona
+            }
+
+            // Cargar listas de selección para la vista
+            CargarListasDeSeleccion();
+            return View(persona);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken] // Protección contra ataques CSRF
+        [AuthorizeSession("User")]
+        public async Task<IActionResult> ActualizarInfo(Persona persona)
+        {
+            if (persona == null)
+            {
+                TempData["ErrorMessage"] = "Los datos enviados no son válidos.";
+                return RedirectToAction(nameof(InformacionPersonal));
+            }
+
+            if (!ModelState.IsValid)
+            {
+                TempData["ErrorMessage"] = "Por favor, revisa los datos ingresados.";
+                CargarListasDeSeleccion();
+                return View("InformacionPersonal", persona); // Retornar la misma vista con los errores
+            }
+
+            try
+            {
+                // Obtener el email del usuario autenticado
+                string usuarioEmail = _usuarioService.UsuarioEmail;
+
+                // Buscar la persona existente en la base de datos
+                var personaExistente = await _appDbContext.Personas
+                    .FirstOrDefaultAsync(p => p.Email == usuarioEmail);
+
+                if (personaExistente == null)
+                {
+                    TempData["ErrorMessage"] = "No se encontró información asociada al usuario.";
+                    return RedirectToAction(nameof(InformacionPersonal));
+                }
+
+                // Actualizar solo los campos editables
+                personaExistente.Email = persona.Email;
+                personaExistente.Telefono = persona.Telefono;
+                personaExistente.Direccion = persona.Direccion;
+
+                // Guardar cambios en la base de datos
+                await _appDbContext.SaveChangesAsync();
+
+                TempData["SuccessMessage"] = "Información actualizada exitosamente.";
+                return RedirectToAction(nameof(InformacionPersonal));
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = $"Ocurrió un error al intentar actualizar la información: {ex.Message}";
+                return RedirectToAction(nameof(InformacionPersonal));
+            }
+        }
+        // Método para cargar listas de selección
         private void CargarListasDeSeleccion()
         {
             ViewBag.Cargos = new SelectList(_appDbContext.Cargos, "IdCargo", "NombreCargo");

@@ -2,11 +2,11 @@
 using InovaAcceso.Data;
 using InovaAcceso.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Authorization;
+using InovaAcceso.Filters;
 
 namespace InovaAcceso.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [AuthorizeSession("Admin")]
     public class TipoDocumentoController : Controller
     {
 		private readonly AppDBContext _appDbContext;
@@ -30,13 +30,11 @@ namespace InovaAcceso.Controllers
             return View(paginatedList);
 		}
         //Controla las funcionalidades de paginacion
-
         [HttpGet]
         public IActionResult NuevoTipoDoc()
         {
             return View();
         }
-
         [HttpPost]
         public async Task<IActionResult> NuevoTipoDoc(TipoDocumento TipoDoc)
         {
@@ -52,7 +50,6 @@ namespace InovaAcceso.Controllers
             return View(ListaTipoDoc);
 
         }
-
         [HttpGet]
         public async Task<IActionResult> EditarTipoDoc(int id)
         {
@@ -74,7 +71,6 @@ namespace InovaAcceso.Controllers
             TempData["ErrorMessage"] = "Ocurrió un error al actualizar el tipo de documento. Por favor, inténtalo de nuevo.";
             return View(ListaTipoDoc);
         }
-
         [HttpGet]
         public async Task<IActionResult> EliminarTipoDoc(int id)
         {

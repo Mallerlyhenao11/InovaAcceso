@@ -1,0 +1,55 @@
+﻿@model PaginatedList<InovaAcceso.Models.GestionTurno>
+
+@{
+    ViewData["Title"] = "Mis turnos";
+}
+
+<div class="container-fluid px-4 mt-4">
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+        <li class="breadcrumb-item active">Mis turnos</li>
+    </ol>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            @foreach (var turno in Model)
+                {
+            <div class="col-12 col-sm-6 col-md-3 mb-4">
+                <!-- Lista desplazable -->
+                    <div class="card border-success mb-3" style="max-width: 16rem;">
+                        <div class="card h-40">
+                            <img src="/img/Cronometro.png" class="card-img-top" alt="Cronometro">
+
+                            <div class="card-footer border-success mb-3">
+                                <h6>
+                                    <small>Fecha Programacion:</small>
+                                </h6>
+                                    <small>Inicio: @turno.FechaInicio.ToString("dd/MM/yyyy") </small><br>
+                                    <small>Fin : @turno.FechaFin.ToString("dd/MM/yyyy") </small>
+                            </div>
+                            <div class="card-footer border-success mb-3">
+                                <h6>
+                                    <small>Hora:</small>
+                                </h6>
+                                    <small>
+                                        Ingreso: @{
+                                            var horaIngreso = turno.Turno.HoraIngreso;
+                                            string horaFormateada = $"{horaIngreso.Hours % 12:D2}:{horaIngreso.Minutes:D2} {(horaIngreso.Hours >= 12 ? "PM" : "AM")}";
+                                        }
+                                        @horaFormateada
+                                    </small><br>
+                                    <small>
+                                        Salida: @{
+                                            var horaSalida = turno.Turno.HoraSalida;
+                                            string horaFormateada1 = $"{horaSalida.Hours % 12:D2}:{horaSalida.Minutes:D2} {(horaSalida.Hours >= 12 ? "PM" : "AM")}";
+                                        }
+                                        @horaFormateada1
+                                    </small>
+                            </div>
+                        </div>
+                    </div>
+                
+            </div>
+            }
+        </div>
+    </div>
+</div>

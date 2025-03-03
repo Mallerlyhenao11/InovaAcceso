@@ -11,10 +11,10 @@ namespace InovaAcceso.Service
     {
         private static string _Host = "smtp.gmail.com";
         private static int _Puerto = 587;
-
         private static string _NombreEnvia = "Soporte InovaAcceso";
         private static string _Correo = "gisela1993jc1208@gmail.com";
         private static string _Clave = "vhle yirp fcrx pzdw";
+       
         public static bool Enviar(EmailSettings EmailSettings)
         {
             try

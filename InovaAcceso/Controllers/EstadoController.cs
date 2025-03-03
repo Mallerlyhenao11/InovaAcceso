@@ -1,12 +1,12 @@
 ﻿using InovaAcceso.Data;
+using InovaAcceso.Filters;
 using InovaAcceso.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace InovaAcceso.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [AuthorizeSession("Admin")]
     public class EstadoController : Controller
     {
         private readonly AppDBContext _appDbContext;
@@ -87,8 +87,6 @@ namespace InovaAcceso.Controllers
             TempData["ErrorMessage"] = "Ocurrió un error al actualizar el cargo. Por favor, inténtalo de nuevo.";
             return View(ListaEstado);
         }
-
-        
         [HttpGet]
         public async Task<IActionResult> EliminarEstado(int id)
         {

@@ -1,0 +1,168 @@
+﻿body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+    line-height: 1.6;
+}
+
+.container-fluid {
+    padding: 30px;
+}
+
+.certificado {
+    background-color: white;
+    border: 2px solid #2b8fc8;
+    border-radius: 10px;
+    padding: 60px;
+    width: 22cm;
+    min-height: 29.7cm;
+    margin: auto;
+    position: relative;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #dee2e6;
+    padding-bottom: 20px;
+}
+
+    .header h2 {
+        font-family: 'Lora', serif;
+        font-weight: 600;
+        color: #18346d;
+        margin-top: 20px;
+    }
+
+.content {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.employee-name {
+    background: linear-gradient(90deg, #fff, #e9f5ff, #fff);
+    padding: 10px;
+    border-radius: 5px;
+    margin: 20px 0;
+    color: #18346d;
+    font-weight: 600;
+}
+
+.table-container {
+    margin: 30px 0;
+}
+
+.custom-table {
+    width: 100%;
+    margin-bottom: 1rem;
+    color: #212529;
+    border-collapse: collapse;
+}
+
+    .custom-table th {
+        background-color: #2b8fc8;
+        color: white;
+        text-align: center;
+        vertical-align: middle;
+        padding: 12px;
+        border: 1px solid #dee2e6;
+    }
+
+    .custom-table td {
+        padding: 12px;
+        vertical-align: middle;
+        border: 1px solid #dee2e6;
+        text-align: center;
+    }
+
+    .custom-table tr:nth-child(even) {
+        background-color: #f8f9fa;
+    }
+
+.sin-turnos {
+    color: #18346d;
+    font-style: italic;
+    background-color: #e9f5ff;
+    padding: 15px;
+    border-radius: 5px;
+    display: inline-block;
+    margin: 20px 0;
+}
+
+.firma {
+    margin-top: 60px;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 50px;
+}
+
+.firma-box {
+    text-align: center;
+    width: 45%;
+}
+
+.firma-line {
+    border-top: 2px solid #2b8fc8;
+    width: 100%;
+    margin: 0 auto 10px;
+    position: relative;
+    padding-top: 10px;
+}
+
+.firma-img {
+    max-width: 120px;
+    max-height: 60px;
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.qr-code {
+    max-width: 100px;
+    margin-top: -40px;
+}
+
+.watermark {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-45deg);
+    opacity: 0.03;
+    font-size: 120px;
+    font-weight: bold;
+    color: #18346d;
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+.certificate-footer {
+    text-align: center;
+    font-size: 12px;
+    color: #6c757d;
+    margin-top: 30px;
+    border-top: 1px solid #dee2e6;
+    padding-top: 15px;
+}
+
+.certificate-id {
+    position: absolute;
+    bottom: 10px;
+    right: 20px;
+    font-size: 10px;
+    color: #6c757d;
+}
+
+.print-button {
+    margin-top: 20px;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.page-break {
+    height: 0;
+    page-break-before: always;
+    margin: 0;
+    border-top: none;
+}

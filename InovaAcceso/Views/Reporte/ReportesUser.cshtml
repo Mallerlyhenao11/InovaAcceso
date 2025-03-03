@@ -1,0 +1,41 @@
+﻿@model InovaAcceso.Models.Persona
+
+@{
+    ViewData["Title"] = "Gestión de Reportes User";
+}
+
+<div class="container-fluid px-4 mt-4">
+    <nav>
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item"><a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Gestión de Certificados usuario</li>
+        </ol>
+    </nav>
+    <h4 class="w-auto px-2">Gestión de Reportes</h4>
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+        <div class="col">
+            <div class="card">
+                <div class="card-header text-white d-flex align-items-center" style="background-color: #18346d;">
+                    <i class="bi bi-file-earmark-text me-2"></i> Certificado Laboral
+                </div>
+                <div class="card-body">
+                    <p>Genera un certificado laboral de los empleados.</p>
+                    <a class="btn text-white w-100" style="background-color: #18346d;" asp-controller="Reporte" target="_blank" asp-action="CertificadoLaboral">Descargar Certificado</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col">
+            <div class="card">
+                <div class="card-header text-white d-flex align-items-center" style="background-color: #2bc9c8;">
+                    <i class="bi bi-clock-history me-2"></i> Reportes de Turnos
+                </div>
+                <div class="card-body">
+                    <p>Consulta los horarios de trabajo.</p>
+                    <a class="btn text-white w-100" style="background-color: #2b8fc8;" asp-controller="Reporte" target="_blank" asp-action="ReporteDeTurnos">Reporte de Turnos</a>
+                </div>
+            </div>
+        </div>
+               
+    </div>
+</div>

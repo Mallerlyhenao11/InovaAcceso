@@ -2,13 +2,13 @@
 using InovaAcceso.Data;
 using InovaAcceso.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Authorization;
+using InovaAcceso.Filters;
 
 
 
 namespace InovaAcceso.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [AuthorizeSession("Admin")]
     public class TurnoController : Controller
     {
         private readonly AppDBContext _appDbContext;

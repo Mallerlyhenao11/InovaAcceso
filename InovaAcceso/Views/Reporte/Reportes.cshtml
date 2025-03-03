@@ -1,37 +1,51 @@
 ﻿@model InovaAcceso.Models.Persona
 
 @{
-    ViewData["Title"] = "Gestión de Reportes";
+    ViewData["Title"] = "Certificados y reportes";
 }
 
 <div class="container-fluid px-4 mt-4">
     <nav>
         <ol class="breadcrumb mb-4">
             <li class="breadcrumb-item"><a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Gestión de Reportes</li>
+            <li class="breadcrumb-item active" aria-current="page">Certificados y reportes</li>
         </ol>
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                @TempData["SuccessMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                @TempData["ErrorMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
     </nav>
-        <h4 class="w-auto px-2">Gestión de Reportes</h4>
-        <div class="row row-cols-1 row-cols-md-2 g-4">
+        <div class="row row-cols-1 mt-2 row-cols-md-2 g-4">
             <div class="col">
                 <div class="card">
                     <div class="card-header text-white d-flex align-items-center" style="background-color: #18346d;">
-                        <i class="bi bi-file-earmark-text me-2"></i> Reporte de Certificado Laboral
+                        <i class="bi bi-file-earmark-text me-2"></i> Certificado Laboral
                     </div>
                     <div class="card-body">
                         <p>Genera un certificado laboral de los empleados.</p>
-                    <a class="btn text-white w-100" style="background-color: #18346d;" asp-controller="Reporte" asp-action="MostrarPDFenPagina">Generar Reporte</a>
+                    <a class="btn text-white w-100" style="background-color: #18346d;" asp-controller="Reporte" target="_blank" asp-action="CertificadoLaboral"><i class="fa fa-download" aria-hidden="true"></i></a>
                     </div>
                 </div>
             </div>
             <div class="col">
                 <div class="card">
                     <div class="card-header text-white d-flex align-items-center" style="background-color: #574da7;">
-                        <i class="bi bi-bar-chart-fill me-2"></i> Reporte Productividad
+                        <i class="bi bi-bar-chart-fill me-2"></i> Reporte de Productividad
                     </div>
                     <div class="card-body">
                         <p>Consulta los indicadores de productividad.</p>
-                        <a class="btn text-white w-100" style="background-color: #574da7;" asp-controller="Reporte" asp-action="ReporteProductividad">Generar Reporte</a>
+                    <a class="btn text-white w-100" target="_blank" style="background-color: #574da7;" asp-controller="Reporte" asp-action="ReporteProductividad"><i class="fa fa-download" aria-hidden="true"></i></a>
                     </div>
                 </div>
             </div>
@@ -42,26 +56,31 @@
                     </div>
                     <div class="card-body">
                         <p>Consulta el cumplimiento laboral de los empleados.</p>
-                    <a class="btn text-white w-100" style="background-color: #2b8fc8;" asp-controller="Reporte" asp-action="ReporteCumplimientoLaboral">Generar Reporte</a>
+                    <a class="btn text-white w-100" style="background-color: #2b8fc8;" asp-controller="Reporte" asp-action="ReporteCumplimientoLaboral"><i class="fa fa-download" aria-hidden="true"></i></a>
                     </div>
                 </div>
             </div>
             <div class="col">
                 <div class="card">
                     <div class="card-header text-white d-flex align-items-center" style="background-color: #2bc9c8;">
-                        <i class="bi bi-clock-history me-2"></i> Reporte Horarios
+                        <i class="bi bi-clock-history me-2"></i> Reporte de turnos
                     </div>
                     <div class="card-body">
                         <p>Consulta los horarios de trabajo.</p>
-                    <a class="btn text-white w-100" style="background-color: #2b8fc8;" asp-controller="Reporte" asp-action="MostrarPDFenReporteHorario">Generar Reporte</a>
+                    <a class="btn text-white w-100" style="background-color: #2b8fc8;" asp-controller="Reporte" target="_blank" asp-action="ReporteDeTurnos"><i class="fa fa-download" aria-hidden="true"></i></a>
                     </div>
                 </div>
             </div>
         </div>
 </div>
+
 <script>
-    function generarCertificadoLaboral() {
-        // Llamar a la acción del controlador para generar el certificado laboral
-        window.location.href = '@Url.Action("GenerarCertificadoLaboral", "Reporte")';
-    }
+        // Espera 5 segundos (5000 ms) y luego oculta la alerta
+    setTimeout(function () {
+        let alertElement = document.querySelector('.alert-dismissible');
+        if (alertElement) {
+            let alert = new bootstrap.Alert(alertElement);
+            alert.close();
+        }
+    }, 9000);
 </script>
