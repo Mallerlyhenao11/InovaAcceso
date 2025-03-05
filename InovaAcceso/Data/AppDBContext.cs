@@ -19,6 +19,7 @@ namespace InovaAcceso.Data
         public DbSet<Rol> Rols { get; set; }
         public DbSet<RegistroAsistencia> RegistroAsistencias { get; set; }
         public DbSet<GestionTurno> GestionTurnos { get; set; }
+        public DbSet<Novedad> Novedades { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -196,6 +197,56 @@ namespace InovaAcceso.Data
                 tb.Property(col => col.ResponsableModificacion).HasMaxLength(50).IsRequired();
             });
             modelBuilder.Entity<GestionTurno>().ToTable("GestionTurno");
+
+            // Configuración de la tabla Novedad
+            modelBuilder.Entity<Novedad>(tb =>
+            {
+                tb.HasKey(col => col.Id); // Clave primaria
+
+                tb.Property(col => col.Id)
+                    .UseIdentityColumn()
+                    .ValueGeneratedOnAdd(); // Generación automática del ID
+
+                tb.Property(col => col.FechaInicioNovedad)
+                    .IsRequired()
+                    .HasColumnType("datetime"); // Fecha de inicio de la novedad
+
+                tb.Property(col => col.FechaFinNovedad)
+                    .IsRequired()
+                    .HasColumnType("datetime"); // Fecha de fin de la novedad
+
+                tb.Property(col => col.Descripcion)
+                    .HasMaxLength(500); // Descripción de la novedad con un máximo de 500 caracteres
+
+                tb.Property(col => col.Aprobar)
+                    .IsRequired()
+                    .HasDefaultValue(false); // Campo booleano con valor por defecto "false"
+
+                tb.Property(col => col.FechaCreacion)
+                    .IsRequired()
+                    .HasColumnType("datetime"); // Fecha de creación
+
+                tb.Property(col => col.FechaModificacion)
+                    .HasColumnType("datetime"); // Fecha de modificación
+
+                tb.Property(col => col.ResponsableModificacion)
+                    .IsRequired()
+                    .HasMaxLength(100); // Responsable de la modificación
+
+                // Configuración de relaciones
+                tb.HasOne(col => col.Estado)
+                    .WithMany()
+                    .HasForeignKey(col => col.IdEstado)
+                    .OnDelete(DeleteBehavior.Restrict); // Relación con Estado
+
+                tb.HasOne(col => col.Persona)
+                    .WithMany()
+                    .HasForeignKey(col => col.IdPersona)
+                    .OnDelete(DeleteBehavior.Cascade); // Relación con Persona
+            });
+            modelBuilder.Entity<Novedad>().ToTable("Novedad"); // Nombre de la tabla en la base de datos
+
+
         }
     }
 }

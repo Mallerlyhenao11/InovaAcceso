@@ -97,7 +97,7 @@ namespace InovaAcceso.Controllers
                     {
                         To = persona.Email,
                         Subject = "Tus credenciales de acceso",
-                        Body = $"Hola {persona.PrimerNombre},<br/><br/>Tu cuenta ha sido creada con éxito.<br/>Número de Documento: {persona.NumeroDocumento}<br/>Contraseña: {passwordInput}<br/><br/>Saludos,<br/>Tu equipo"
+                        Body = $"Hola {persona.PrimerNombre},<br/><br/>Tu cuenta ha sido creada con éxito.<br/>Número de Documento: {persona.NumeroDocumento}<br/>Contraseña: {passwordInput}<br/><br/>Saludos.<br/>Tu equipo"
                     };
 
                     bool enviado = CorreoServicio.Enviar(email);

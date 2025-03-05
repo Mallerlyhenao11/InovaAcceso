@@ -309,6 +309,9 @@ namespace InovaAcceso.Controllers
         }
         //Grafico asistencia
         [HttpGet]
+
+
+        // GRAFICOS
         public JsonResult ObtenerDatosGrafico(DateTime fechaInicio, DateTime fechaFin)
         {
             var datos = _appDbContext.RegistroAsistencias

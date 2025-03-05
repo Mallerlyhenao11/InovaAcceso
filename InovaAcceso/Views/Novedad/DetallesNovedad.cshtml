@@ -1,0 +1,42 @@
+﻿@model InovaAcceso.Models.Novedad
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles de Novedad</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Detalles de Novedad</h1>
+
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h3>Empleado: @Model.Persona.PrimerNombre @Model.Persona.PrimerApellido</h3>
+            </div>
+            <div class="card-body">
+                <p><strong>Descripción:</strong> @Model.Descripcion</p>
+                <p><strong>Fecha Inicio:</strong> @Model.FechaInicioNovedad.ToShortDateString()</p>
+                <p><strong>Fecha Fin:</strong> @Model.FechaFinNovedad.ToShortDateString()</p>
+                <p><strong>Estado:</strong> @Model.Estado.NombreEstado</p>
+                <p><strong>Aprobada:</strong> @(Model.Aprobar ? "Sí" : "No")</p>
+                <p><strong>Responsable Modificación:</strong> @Model.ResponsableModificacion</p>
+                <p><strong>Fecha Creación:</strong> @Model.FechaCreacion.ToShortDateString()</p>
+                <p><strong>Última Modificación:</strong> @Model.FechaModificacion.ToShortDateString()</p>
+            </div>
+        </div>
+
+        <a href="@Url.Action("ListaNovedad", "Novedad")" class="btn btn-secondary mt-3">
+            <i class="fas fa-arrow-left"></i> Volver a la Lista
+        </a>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
