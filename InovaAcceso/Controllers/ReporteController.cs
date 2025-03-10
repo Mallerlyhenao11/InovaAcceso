@@ -171,6 +171,8 @@ namespace InovaAcceso.Controllers
 
             return View(listaRegistros);
         }
+
+
         public IActionResult ExportarExcel(List<RegistroAsistencia> registros)
         {
             if (registros == null || !registros.Any())
@@ -220,6 +222,8 @@ namespace InovaAcceso.Controllers
                 }
             }
         }
+
+
 
         // Reporte de productividad
         public IActionResult ReporteProductividad()

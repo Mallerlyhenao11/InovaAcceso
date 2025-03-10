@@ -19,9 +19,6 @@ namespace InovaAcceso.Controllers
         {
             _usuarioService = usuarioService;
             _appDbContext = appDbContext;
-            if (true)
-            {
-            }
         }
 
         [AuthorizeSession("Admin")]
@@ -55,7 +52,7 @@ namespace InovaAcceso.Controllers
             return View();
         }
         [AuthorizeSession("Admin")]
-        [HttpPost]
+        [HttpPost] 
         public async Task<IActionResult> AgregarPersona(Persona persona)
         {
             if (!ModelState.IsValid)

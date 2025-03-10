@@ -1,0 +1,119 @@
+﻿@using InovaAcceso.Service;
+@inject UsuarioService _usuarioService
+<div class="container-fluid px-4 mt-2">
+    <nav>
+        <ol class="breadcrumb mb-2">
+            <li class="breadcrumb-item"><a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Capturar Huella</li>
+        </ol>
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                @TempData["SuccessMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                @TempData["ErrorMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+    </nav>
+    <div class="container">
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header text-white d-flex align-items-center" style="background-color: #18346d;">
+                        <i class="bi bi-usb me-2"></i> Estado del Dispositivo
+                    </div>
+                    <div class="card-body" >
+                        <p class="alert alert-primar" id="deviceStatus"><i class="fa-solid fa-circle-info me-2"></i>Verificando dispositivo...</p>
+                        <button class="btn text-white w-100" id="btnVerificar" style="background-color: #18346d;">Verificar Dispositivo</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header text-white d-flex align-items-center" style="background-color: #574da7;">
+                        <i class="bi bi-fingerprint me-2"></i> Capturar de Huellas
+                    </div>
+                    <div class="card-body">
+                        <p class="alert alert-primary" id="deviceStatusHu"><i class="fa-solid fa-circle-info me-2"></i>Esperando capturar de huellas</p>
+                        <button class="btn text-white w-100" id="btnCapturar" style="background-color: #574da7;">Capturar Huella</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-md-6">
+                <!-- Validar Persona-->
+                <div class="card">
+                    <div class="card-header text-white d-flex align-items-center" style="background-color: #2b8fc8;">
+                        <i class="bi bi-person-plus-fill me-2"></i> Validar Empleado
+                    </div>
+                    <div class="card-body">
+                        <input type="text" class="form-control mb-2" id="documentoPersona" placeholder="Ingrese el numero de documento">
+                        <p class="alert alert-primary" id="deviceStatusPersona"><i class="fa-solid fa-circle-info me-2"></i>Esperando busqueda empleado</p>
+                        <button class="btn text-white w-100" id="btnValidarPersona" style="background-color: #2b8fc8;">Validar Empleado</button>
+                    </div>
+                </div>
+                <!-- Enrolar Huella -->
+                <div class="col-md-12 mt-3">
+                    <button class="btn btn-success w-100" id="btnEnrolarHuellas"><i class=" fa fa-address-card "></i>  Enrolar Huella</button>
+                </div>
+                <!-- Enrolar Huella -->
+            </div>
+            <div class="col-md-6">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-6 d-flex justify-content-center">
+                            <div class="card">
+                                <img id="fingerprintImage1" src="/img/HuellaCaptura.png" alt="Huella 1" class="img-fluid" style="width: 180px; height: 160px; border: 1px solid #000;">
+                            </div>
+                        </div>
+                        <div class="col-6 d-flex justify-content-center">
+                            <div class="card">
+                                <img id="fingerprintImage2" src="/img/HuellaCaptura.png" alt="Huella 2" class="img-fluid" style="width: 180px; height: 160px; border: 1px solid #000;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row justify-content-center mt-3">
+                        <div class="col-6 d-flex justify-content-center">
+                            <div class="card">
+                                <img id="fingerprintImage3" src="/img/HuellaCaptura.png" alt="Huella 3" class="img-fluid" style="width: 180px; height: 160px; border: 1px solid #000;">
+                            </div>
+                        </div>
+                        <div class="col-6 d-flex justify-content-center">
+                            <div class="card">
+                                <img id="fingerprintImage4" src="/img/HuellaCaptura.png" alt="Huella 4" class="img-fluid" style="width: 180px; height: 160px; border: 1px solid #000;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="processingModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body text-center p-4">
+                <div class="spinner-border text-primary mb-3" role="status">
+                    <span class="visually-hidden">Procesando...</span>
+                </div>
+                <h5 id="processingMessage" class="mb-0">Procesando...</h5>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/sweetalert2/sweetalert2.all.min.js"></script>
+    <script src="@Url.Content("~/js/huellas.js")"></script>
+}

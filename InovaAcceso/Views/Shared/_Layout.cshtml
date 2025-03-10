@@ -1,121 +1,118 @@
 ﻿@using InovaAcceso.Service;
 @inject UsuarioService _usuarioService
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
+@* Cambiado a "es" para español *@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - InovaAcceso</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    @* CSS - Eliminadas redundancias y ordenadas las referencias *@
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/InovaAcceso.styles.css" asp-append-version="true" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-emoji-heart-eyes" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" /><path d="M11.315 10.014a.5.5 0 0 1 .548.736A4.498 4.498 0 0 1 7.965 13a4.498 4.498 0 0 1-3.898-2.25.5.5 0 0 1 .548-.736h.005l.017.005.067.015.252.055c.215.046.515.108.857.169.693.124 1.522.242 2.152.242.63 0 1.46-.118 2.152-.242a26.58 26.58 0 0 0 1.109-.224l.067-.015.017-.004.005-.002zM4.756 4.566c.763-1.424 4.02-.12.952 3.434-4.496-1.596-2.35-4.298-.952-3.434zm6.488 0c1.398-.864 3.544 1.838-.952 3.434-3.067-3.554.19-4.858.952-3.434z" /></svg>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-
+    @* Eliminado el SVG inline - debería estar en un archivo separado o usado como ícono *@
 </head>
 <body class="sb-nav-fixed">
     <nav class="sb-topnav navbar navbar-expand navbar-dark" style="background-color: #132A58;">
-        <!-- Navbar Brand-->
-        <a class="navbar-brand"> InovaAcceso</a>
-        <!-- Sidebar Toggle-->
-        <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
-        <!-- Navbar-->
-        
-        <div class="navbar-nav ms-auto me-0 me-md-3 my-2 my-md-0">
-            <a asp-area="" asp-controller="Home" asp-action="Salir" class="nav-link">
-                <div class="sb-nav-link-icon" style="color: #ffffff;">
-                    <i class="fa fa-sign-in fa-lg"></i>
-                </div>
-            </a>
+        <a class="navbar-brand ps-3"> InovaAcceso</a>
+        <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!">
+            <i class="fas fa-bars"></i>
+        </button>
+
+        <div class="ms-auto me-0 me-md-3 my-2 my-md-0">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a asp-area="" asp-controller="Home" asp-action="Salir" class="nav-link">
+                        <i class="fa fa-sign-out-alt fa-lg"></i> @* Actualizado al ícono más moderno *@
+                    </a>
+                </li>
+            </ul>
         </div>
     </nav>
+
     <div id="layoutSidenav">
         <div id="layoutSidenav_nav">
             <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                 <div class="sb-sidenav-menu" style="background-color: #132A58;">
-
-                    @if (_usuarioService.UsuarioRol == "Admin") // Verifica si el usuario es Admin
-                    {
-                    <!-- Si el rol es 1 mostrar todo el nav si es 2 no -->
-                    <div class="nav">
-                        <!-- Grupo1<div class="sb-sidenav-menu-heading">Home</div>-->
-                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
-                            <div class="sb-nav-link-icon" style="color: #ffffff;"><i class="fa fa-home"></i></div>
-                            Home
-                        </a>
-                        <!-- Grupo Paginas-->
-                        <div class="sb-sidenav-menu-heading" style="color: #ffffff;">Paginas</div>
-                        <!-- Personas-->
-                        <a class="nav-link" asp-area="" asp-controller="Persona" asp-action="ListaPersonas">
-                            <div class="sb-nav-link-icon"><i class="fa-solid fa-users-gear" style="color: #B197FC;"></i></div>
-                            Usuarios
-                        </a>                        
-                        <!-- Gestion Turno-->
-                        <a class="nav-link " asp-area="" asp-controller="GestionTurno" asp-action="listaAsignacionTurno">
-                            <div class="sb-nav-link-icon"><i class="fa-solid fa-user-clock" style="color: #B197FC;"></i></div>
-                            Asignar Turnos
-                        </a>
-                        <!-- Asistencia-->
-                        <a class="nav-link" asp-area="" asp-controller="Asistencia" asp-action="listaAsistencia">
-                            
-                            <div class="sb-nav-link-icon"><i class="fa-solid fa-clock" style="color: #B197FC;"></i></div>
-                            Asistencia
-                        </a>
-                        <!-- Turnos-->
-                        <a class="nav-link" asp-area="" asp-controller="Turno" asp-action="ListaTurnos">
-                            <div class="sb-nav-link-icon"><i class="fa-regular fa-calendar-plus" style="color: #B197FC;"></i></div>
-                            Turnos
-                        </a>
-                        <!-- Grupo datos sistema-->
-                        <div class="sb-sidenav-menu-heading" style="color: #ffffff;">Datos del sistema</div>
-                        <!-- Cargos-->
-                        <a class="nav-link" asp-area="" asp-controller="Cargo" asp-action="ListaCargo">
-                            <div class="sb-nav-link-icon"><i class="fa-solid fa-award" style="color: #B197FC;"></i></div>
-                            Cargos
-                        </a>
-                        <!-- Estados-->
-                        <a class="nav-link" asp-area="" asp-controller="Estado" asp-action="ListaEstado">
-                            <div class="sb-nav-link-icon"><i class="fa-solid fa-award" style="color: #B197FC;"></i></div>
-                            Estados
-                        </a>
-                        <!-- Tipo Documento-->
-                        <a class="nav-link" asp-area="" asp-controller="TipoDocumento" asp-action="ListaTipoDoc">
-                            <div class="sb-nav-link-icon"><i class="fa-regular fa-address-card" style="color: #B197FC;"></i></div>
-                            Tipo Documento
-                        </a>
-                        <!-- Tipo Documento-->
-                        <a class="nav-link" href="#">
-                            <div class="sb-nav-link-icon"><i class="fa-solid fa-fingerprint" style="color: #B197FC;"></i></div>
-                            Huella
-                        </a>
-                        <!-- Grupo Reportes-->
-                        <div class="sb-sidenav-menu-heading" style="color: #ffffff;">Visor de Datos</div>
-                            <a class="nav-link" asp-area="" asp-controller="Reporte" asp-action="Reportes">
-                            <div class="sb-nav-link-icon"><i class="fa-solid fa-file-lines" style="color: #B197FC;"></i></div>
-                            Reportes
-                        </a>
-                            <!-- Grupo de graficos-->
-                            <a class="nav-link" asp-controller="Reporte" asp-action="GraficoAsistencia">
-                            <div class="sb-nav-link-icon"><i class="fas fa-chart-area" style="color: #B197FC;"></i></div>
-                            Gráficos
-                        </a>
-                            <!-- Grupo de Novedades -->
-                            <a class="nav-link" asp-controller="Novedad" asp-action="ListaNovedad">
-                                <div class="sb-nav-link-icon">
-                                    <i class="fas fa-chart-area" style="color: #B197FC;"></i>
-                                </div>
-                                Novedades
-                            </a>
-                    </div>
-                    }
-
-                    @if (_usuarioService.UsuarioRol == "User") // Verifica si el usuario es User
+                    @if (_usuarioService.UsuarioRol == "Admin")
                     {
                         <div class="nav">
+                            @* El contenido del menú Admin se mantiene igual *@
+                            @* ... *@
+                            <!-- Grupo1<div class="sb-sidenav-menu-heading">Home</div>-->
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+                                <div class="sb-nav-link-icon" style="color: #ffffff;"><i class="fa fa-home"></i></div>
+                                Home
+                            </a>
+                            <!-- Grupo Paginas-->
+                            <div class="sb-sidenav-menu-heading" style="color: #ffffff;">Paginas</div>
+                            <!-- Personas-->
+                            <a class="nav-link" asp-area="" asp-controller="Persona" asp-action="ListaPersonas">
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-users-gear" style="color: #B197FC;"></i></div>
+                                Usuarios
+                            </a>
+                            <!-- Gestion Turno-->
+                            <a class="nav-link " asp-area="" asp-controller="GestionTurno" asp-action="listaAsignacionTurno">
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-user-clock" style="color: #B197FC;"></i></div>
+                                Asignar Turnos
+                            </a>
+                            <!-- Asistencia-->
+                            <a class="nav-link" asp-area="" asp-controller="Asistencia" asp-action="listaAsistencia">
+
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-clock" style="color: #B197FC;"></i></div>
+                                Asistencia
+                            </a>
+                            <!-- Turnos-->
+                            <a class="nav-link" asp-area="" asp-controller="Turno" asp-action="ListaTurnos">
+                                <div class="sb-nav-link-icon"><i class="fa-regular fa-calendar-plus" style="color: #B197FC;"></i></div>
+                                Turnos
+                            </a>
+                            <!-- Grupo datos sistema-->
+                            <div class="sb-sidenav-menu-heading" style="color: #ffffff;">Datos del sistema</div>
+                            <!-- Cargos-->
+                            <a class="nav-link" asp-area="" asp-controller="Cargo" asp-action="ListaCargo">
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-award" style="color: #B197FC;"></i></div>
+                                Cargos
+                            </a>
+                            <!-- Estados-->
+                            <a class="nav-link" asp-area="" asp-controller="Estado" asp-action="ListaEstado">
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-award" style="color: #B197FC;"></i></div>
+                                Estados
+                            </a>
+                            <!-- Tipo Documento-->
+                            <a class="nav-link" asp-area="" asp-controller="TipoDocumento" asp-action="ListaTipoDoc">
+                                <div class="sb-nav-link-icon"><i class="fa-regular fa-address-card" style="color: #B197FC;"></i></div>
+                                Tipo Documento
+                            </a>
+                            <!-- Tipo Huella-->
+                            <a class="nav-link" asp-area="" asp-controller="Huella" asp-action="CapturarHuella">
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-fingerprint" style="color: #B197FC;"></i></div>
+                                Huella
+                            </a>
+                            <!-- Grupo Reportes-->
+                            <div class="sb-sidenav-menu-heading" style="color: #ffffff;">Visor de Datos</div>
+                            <a class="nav-link" asp-area="" asp-controller="Reporte" asp-action="Reportes">
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-file-lines" style="color: #B197FC;"></i></div>
+                                Reportes
+                            </a>
+                            <!-- Grupo de graficos-->
+                            <a class="nav-link" asp-controller="Reporte" asp-action="GraficoAsistencia">
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area" style="color: #B197FC;"></i></div>
+                                Gráficos
+                            </a>
+
+                        </div>
+                    }
+                    else if (_usuarioService.UsuarioRol == "User")
+                    {
+                        <div class="nav">
+                            @* El contenido del menú User se mantiene igual *@
+                            @* ... *@
                             <!-- Grupo1<div class="sb-sidenav-menu-heading">Home</div>-->
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
                                 <div class="sb-nav-link-icon" style="color: #ffffff;"><i class="fa fa-home"></i></div>
@@ -123,41 +120,38 @@
                             </a>
                             <!-- Grupo usurio para user-->
                             <a class="nav-link" asp-area="" asp-controller="Persona" asp-action="InformacionPersonal">
-                                <div class="sb-nav-link-icon"><i class="fa-solid fa-user" style="color: #B197FC;"> </i></div> 
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-user" style="color: #B197FC;"> </i></div>
                                 Mi Información
                             </a>
                             <!-- Grupo de certificados para usuario-->
                             <a class="nav-link" asp-area="" asp-controller="GestionTurno" asp-action="ListarTurnoPersona">
                                 <div class="sb-nav-link-icon"><i class="fa-solid fa-user-clock" style="color: #B197FC;"></i></div>
-                               Mis Turnos
+                                Mis Turnos
                             </a>
                             <!-- Grupo de novedades para usuario-->
                             <a class="nav-link" asp-area="" asp-controller="Reporte" asp-action="ReportesUser">
                                 <div class="sb-nav-link-icon"><i class="fa-solid fa-file-lines" style="color: #B197FC;"></i></div>
                                 Certificados
                             </a>
-                            <!-- Grupo de novedades para usuario-->
-                            <a class="nav-link" asp-controller="/" asp-action="/">
-                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area" style="color: #B197FC;"></i></div>
-                                Novedades
-                            </a>
                         </div>
                     }
                 </div>
                 <div class="sb-sidenav-footer" style="background-color: #132A58;">
-                    <div class="small"> Inicio sesión como: @_usuarioService.UsuarioRol</div>
+                    <div class="small">Inicio sesión como: @_usuarioService.UsuarioRol</div>
                     @_usuarioService.UsuarioNombres
                 </div>
             </nav>
         </div>
+
         <div id="layoutSidenav_content">
-            <main>
+            <main class="container-fluid px-4">
                 @RenderBody()
             </main>
+
             <footer class="py-4 bg-light mt-auto">
                 <div class="container-fluid px-4">
                     <div class="d-flex align-items-center justify-content-between small">
-                        <div class="text-muted">Copyright &copy; InovaAcceso -2024</div>
+                        <div class="text-muted">Copyright &copy; InovaAcceso @DateTime.Now.Year</div>
                         <div>
                             <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </div>
@@ -166,14 +160,13 @@
             </footer>
         </div>
     </div>
+
+    @* Scripts - Eliminadas redundancias y ordenados *@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

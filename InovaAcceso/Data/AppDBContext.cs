@@ -20,13 +20,11 @@ namespace InovaAcceso.Data
         public DbSet<RegistroAsistencia> RegistroAsistencias { get; set; }
         public DbSet<GestionTurno> GestionTurnos { get; set; }
         public DbSet<Novedad> Novedades { get; set; }
-
+        public DbSet<Huella> Huellas { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder); // Asegúrate de llamar a la base para configurar las entidades de Identity
-
-            // Configuración de la tabla Rol
-            modelBuilder.Entity<Rol>(tb =>
+            base.OnModelCreating(modelBuilder);            modelBuilder.Entity<Rol>(tb =>
             {
                 tb.HasKey(col => col.IdRol);
                 tb.Property(col => col.IdRol)
@@ -246,6 +244,50 @@ namespace InovaAcceso.Data
             });
             modelBuilder.Entity<Novedad>().ToTable("Novedad"); // Nombre de la tabla en la base de datos
 
+
+            modelBuilder.Entity<Huella>(tb =>
+            {
+                // Configuración de la llave primaria
+                tb.HasKey(e => e.IdHuella);
+                tb.Property(e => e.IdHuella)
+                    .UseIdentityColumn()
+                    .ValueGeneratedOnAdd();
+
+                // Configuración de propiedades requeridas
+                tb.Property(e => e.IdPersona).IsRequired();
+                tb.Property(e => e.DatosHuella).IsRequired();
+                tb.Property(e => e.FechaRegistro)
+                    .IsRequired()
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("GETDATE()");
+
+                // Configuración de otras propiedades
+                tb.Property(e => e.Activo)
+                    .IsRequired()
+                    .HasDefaultValue(true);
+
+                // Campos de auditoría
+                tb.Property(e => e.FechaCreacion)
+                    .IsRequired()
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("GETDATE()");
+
+                tb.Property(e => e.FechaModificacion)
+                    .IsRequired()
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("GETDATE()");
+
+                tb.Property(e => e.ResponsableModificacion)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                // Configuración de la relación con Persona
+                tb.HasOne(d => d.Persona)
+                    .WithMany()
+                    .HasForeignKey(d => d.IdPersona)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+            modelBuilder.Entity<Huella>().ToTable("Huella");
 
         }
     }

@@ -5,7 +5,7 @@ namespace InovaAcceso.Models
 {
     public class Novedad
     {
-     
+
         public int Id { get; set; }
         public int IdEstado { get; set; }
         public virtual required Estado Estado { get; set; }

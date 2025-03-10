@@ -80,41 +80,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <!-- Card 3: Novedades -->
-            <div class="col">
-                <div class="card">
-                    <div class="card-header bg-secondary text-white d-flex align-items-center">
-                        <i class="bi bi-info-circle-fill me-2"></i> <!-- Ícono -->
-                        Novedades
-                    </div>
-                    <div class="card-body">
-                        <div class="text-center mb-3">
-                            <img src="/img/novedades.jpg" alt="Novedades" class="img-fluid" style="max-width: 100px;">
-                            <p>Novedades recientes:</p>
-                        </div>
-                        <!-- Lista desplazable -->
-                        <div class="scrollable-list">
-                            <ul class="list-group">
-                                @if (novedades != null && novedades.Any())
-                                {
-                                    foreach (var novedad in novedades)
-                                    {
-                                        <li class="list-group-item">
-                                            <strong>@novedad.NombreCompleto:</strong> @novedad.Detalle
-                                        </li>
-                                    }
-                                }
-                                else
-                                {
-                                    <li class="list-group-item text-muted">No hay novedades</li>
-                                }
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            </div>            
         </div>
     </div>
 </body>

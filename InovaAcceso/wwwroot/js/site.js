@@ -28,3 +28,13 @@ window.addEventListener('DOMContentLoaded', event => {
     }
 
 });
+// Toggle del sidebar
+document.addEventListener('DOMContentLoaded', function () {
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    if (sidebarToggle) {
+        sidebarToggle.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.body.classList.toggle('sb-sidenav-toggled');
+        });
+    }
+});

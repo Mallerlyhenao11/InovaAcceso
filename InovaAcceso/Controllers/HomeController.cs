@@ -100,5 +100,8 @@ namespace InovaAcceso.Controllers
             HttpContext.Session.Clear();
             return RedirectToAction("Reloj", "Home");
         }
+
+       
+
     }
 }

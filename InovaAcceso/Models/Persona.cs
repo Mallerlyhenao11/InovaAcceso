@@ -40,6 +40,5 @@ namespace InovaAcceso.Models
         public DateTime FechaModificacion { get; set; }
         public required string ResponsableModificacion { get; set; }
         public string NombreCompleto => $"{PrimerNombre} {SegundoNombre} {PrimerApellido} {SegundoApellido}".Trim();
-
     }
 }

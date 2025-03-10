@@ -53,12 +53,38 @@ namespace InovaAcceso.Controllers
         [HttpPost]
         public async Task<IActionResult> asignarTurno(GestionTurno gestionTurno)
         {
-            gestionTurno.FechaCreacion = DateTime.Now;
-            gestionTurno.FechaModificacion = DateTime.Now;
-            gestionTurno.ResponsableModificacion = _usuarioService.UsuarioNombres; 
-
             try
             {
+                // Validar que la fecha fin sea posterior a la fecha inicio
+                if (gestionTurno.FechaFin <= gestionTurno.FechaInicio)
+                {
+                    TempData["ErrorMessage"] = "La fecha de fin debe ser posterior a la fecha de inicio.";
+                    cargarListasDeSeleccion();
+                    return View(gestionTurno);
+                }
+
+                // Verificar si ya existe una asignación del MISMO turno para la persona en fechas que se solapan
+                var turnoExistente = await _appDbContext.GestionTurnos
+                    .Where(gt =>
+                        gt.IdPersona == gestionTurno.IdPersona &&
+                        gt.IdTurno == gestionTurno.IdTurno && // Mismo turno
+                        ((gt.FechaInicio <= gestionTurno.FechaInicio && gt.FechaFin >= gestionTurno.FechaInicio) ||
+                         (gt.FechaInicio <= gestionTurno.FechaFin && gt.FechaFin >= gestionTurno.FechaFin) ||
+                         (gt.FechaInicio >= gestionTurno.FechaInicio && gt.FechaFin <= gestionTurno.FechaFin)))
+                    .FirstOrDefaultAsync();
+
+                if (turnoExistente != null)
+                {
+                    TempData["ErrorMessage"] = $"La persona ya tiene asignado este turno del {turnoExistente.FechaInicio:dd/MM/yyyy} al {turnoExistente.FechaFin:dd/MM/yyyy}";
+                    cargarListasDeSeleccion();
+                    return View(gestionTurno);
+                }
+
+                // Asignar valores automáticos
+                gestionTurno.FechaCreacion = DateTime.Now;
+                gestionTurno.FechaModificacion = DateTime.Now;
+                gestionTurno.ResponsableModificacion = _usuarioService.UsuarioNombres;
+
                 await _appDbContext.GestionTurnos.AddAsync(gestionTurno);
                 await _appDbContext.SaveChangesAsync();
                 TempData["SuccessMessage"] = "Turno asignado exitosamente.";
@@ -95,7 +121,34 @@ namespace InovaAcceso.Controllers
 
             try
             {
-                var gestionTurnoExistente = await _appDbContext.GestionTurnos.FirstOrDefaultAsync(g => g.IdGestionTurno == gestionTurno.IdGestionTurno);
+                // Validar que la fecha fin sea posterior a la fecha inicio
+                if (gestionTurno.FechaFin <= gestionTurno.FechaInicio)
+                {
+                    TempData["ErrorMessage"] = "La fecha de fin debe ser posterior a la fecha de inicio.";
+                    cargarListasDeSeleccion();
+                    return View(gestionTurno);
+                }
+
+                // Verificar si ya existe una asignación del MISMO turno para la persona en fechas que se solapan
+                var turnoExistente = await _appDbContext.GestionTurnos
+                    .Where(gt =>
+                        gt.IdPersona == gestionTurno.IdPersona &&
+                        gt.IdTurno == gestionTurno.IdTurno &&
+                        gt.IdGestionTurno != gestionTurno.IdGestionTurno && // Excluir el turno actual
+                        ((gt.FechaInicio <= gestionTurno.FechaInicio && gt.FechaFin >= gestionTurno.FechaInicio) ||
+                         (gt.FechaInicio <= gestionTurno.FechaFin && gt.FechaFin >= gestionTurno.FechaFin) ||
+                         (gt.FechaInicio >= gestionTurno.FechaInicio && gt.FechaFin <= gestionTurno.FechaFin)))
+                    .FirstOrDefaultAsync();
+
+                if (turnoExistente != null)
+                {
+                    TempData["ErrorMessage"] = $"La persona ya tiene asignado este turno del {turnoExistente.FechaInicio:dd/MM/yyyy} al {turnoExistente.FechaFin:dd/MM/yyyy}";
+                    cargarListasDeSeleccion();
+                    return View(gestionTurno);
+                }
+
+                var gestionTurnoExistente = await _appDbContext.GestionTurnos
+                    .FirstOrDefaultAsync(g => g.IdGestionTurno == gestionTurno.IdGestionTurno);
 
                 if (gestionTurnoExistente != null)
                 {
@@ -104,7 +157,7 @@ namespace InovaAcceso.Controllers
                     gestionTurnoExistente.FechaInicio = gestionTurno.FechaInicio;
                     gestionTurnoExistente.FechaFin = gestionTurno.FechaFin;
                     gestionTurnoExistente.FechaModificacion = DateTime.Now;
-                    gestionTurnoExistente.ResponsableModificacion = _usuarioService.UsuarioNombres; 
+                    gestionTurnoExistente.ResponsableModificacion = _usuarioService.UsuarioNombres;
 
                     _appDbContext.GestionTurnos.Update(gestionTurnoExistente);
                     await _appDbContext.SaveChangesAsync();

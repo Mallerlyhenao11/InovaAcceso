@@ -1,4 +1,4 @@
-﻿@model InovaAcceso.Models.Persona
+﻿ @model InovaAcceso.Models.Persona
 @using InovaAcceso.Service
 @inject UsuarioService _usuarioService
 
@@ -86,10 +86,22 @@
         </fieldset>
 
         <!-- Botones de Acción -->
-        <div class="d-flex justify-content-center mb-2">
-            <button type="submit" class="btn btn-primary me-2">Guardar Cambios</button>
-            <a asp-controller="Persona" asp-action="ListaPersonas" class="btn btn-secondary">Cancelar</a>
+        <div class="d-flex justify-content-center gap-2">
+            <!-- Botón Guardar Cambios -->
+            <button type="submit"
+                    class="btn btn-sm"
+                    style="background-color: #2b8fc8; border-color: #2b8fc8; color: white; display: flex; align-items: center; justify-content: center; padding: 6px 12px;">
+                <i class="bi bi-check-circle me-1"></i> Guardar Cambios
+            </button>
+
+            <!-- Botón Cancelar -->
+            <a asp-controller="Persona" asp-action="ListaPersonas"
+               class="btn btn-sm"
+               style="background-color: #574da7; border-color: #574da7; color: white; display: flex; align-items: center; justify-content: center; padding: 6px 12px;">
+                <i class="bi bi-x-circle me-1"></i> Cancelar
+            </a>
         </div>
+
     </form>
 </div>
 
